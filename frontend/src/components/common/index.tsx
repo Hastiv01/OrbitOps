@@ -389,6 +389,11 @@ interface StatCardProps {
   icon?: React.ReactNode;
 }
 
+export { PageHeader, SectionCard } from './PageHeader';
+export type { PageHeaderProps, Breadcrumb } from './PageHeader';
+export { Table, DataTable } from './Table';
+export type { TableColumn } from './Table';
+
 export const StatCard: React.FC<StatCardProps> = ({ label, value, unit = '', trend, icon }) => {
   return (
     <Card>
