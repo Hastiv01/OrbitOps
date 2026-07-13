@@ -73,13 +73,13 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
             className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className={`fixed left-1/2 top-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 ${sizeClasses[size]}`}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            className={`fixed right-1/4 top-10 z-50 w-full -translate-x-1/2 mx-4 ${sizeClasses[size]}`}
           >
-            <div className="rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-xl max-h-[85vh] flex flex-col">
+              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 flex-shrink-0">
                 <h2 className="text-lg font-semibold text-white">{title}</h2>
                 <button
                   onClick={onClose}
@@ -88,7 +88,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
                   <FiX className="text-lg" />
                 </button>
               </div>
-              <div className="p-6">{children}</div>
+              <div className="p-6 overflow-y-auto flex-1">{children}</div>
             </div>
           </motion.div>
         </>
