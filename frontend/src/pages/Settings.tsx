@@ -63,18 +63,9 @@ const Settings = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <div className="rounded-xl bg-sky-500/15 p-2 text-sky-300"><FiGlobe /></div>
                   <div>
-                    <p className="font-semibold text-white">Language</p>
-                    <p className="text-sm text-slate-400">Select display language</p>
+                    <p className="font-semibold text-white">Language is English.</p>
                   </div>
                 </div>
-                <select value={language} onChange={e => setLanguage(e.target.value)} className="w-full max-w-xs rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-sky-500 focus:outline-none">
-                  <option value="en">English</option>
-                  <option value="fr">Français</option>
-                  <option value="de">Deutsch</option>
-                  <option value="ja">日本語</option>
-                  <option value="hi">हिन्दी</option>
-                  <option value="es">Español</option>
-                </select>
               </div>
 
               {/* Notifications */}
