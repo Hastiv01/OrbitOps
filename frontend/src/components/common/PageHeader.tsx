@@ -34,7 +34,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <div className="space-y-3 print:space-y-1">
       {breadcrumbs.length > 0 && (
-        <nav className="flex flex-wrap items-center gap-1 text-sm text-slate-500 dark:text-slate-400 print:hidden">
+        <nav className="flex flex-wrap items-center gap-1 text-sm text-slate-600 dark:text-slate-400 print:hidden">
           {breadcrumbs.map((crumb, i) => (
             <React.Fragment key={`${crumb.label}-${i}`}>
               {i > 0 && <FiChevronRight className="text-xs" />}
@@ -60,7 +60,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               </span>
             )}
           </div>
-          {description && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{description}</p>}
+          {description && <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{description}</p>}
           {lastUpdated && (
             <p className="mt-1 text-xs text-slate-500 print:text-slate-700">
               Last updated: {lastUpdated.toLocaleTimeString()}
@@ -101,7 +101,7 @@ export const SectionCard: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ title, subtitle, tooltip, action, children, className = '' }) => (
-  <div className={`rounded-3xl border border-slate-200 bg-white p-5 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:shadow-glow print:border-slate-300 print:shadow-none print:bg-white ${className}`}>
+  <div className={`rounded-3xl border border-slate-200 bg-white p-5 shadow-sm backdrop-blur-xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-glow print:border-slate-300 print:shadow-none print:bg-white ${className}`}>
     <div className="mb-4 flex items-start justify-between gap-3">
       <div>
         <div className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export const SectionCard: React.FC<{
             </span>
           )}
         </div>
-        {subtitle && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{subtitle}</p>}
+        {subtitle && <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{subtitle}</p>}
       </div>
       <div className="print:hidden">
         {action}

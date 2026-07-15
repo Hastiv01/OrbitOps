@@ -74,7 +74,7 @@ const PayloadPlanner = () => {
         <div>
           <p className="text-xs text-slate-500">Dashboard &gt; Payload Planner</p>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Payload Planner</h1>
-          <p className="mt-1 text-slate-500 dark:text-slate-400 print:text-slate-700">Manage payload assignments and schedules</p>
+          <p className="mt-1 text-slate-600 dark:text-slate-400 print:text-slate-700">Manage payload assignments and schedules</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
@@ -92,9 +92,9 @@ const PayloadPlanner = () => {
         ].map(item => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+            <div key={item.label} className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{item.label}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{item.label}</p>
                 <div className="rounded-xl bg-sky-500/15 p-2 text-sky-600 dark:text-sky-300 print:text-black"><Icon /></div>
               </div>
               <p className="mt-4 text-3xl font-semibold text-slate-900 dark:text-white print:text-black">{item.value}</p>
@@ -113,27 +113,27 @@ const PayloadPlanner = () => {
       </div>
 
       {/* Payload Table */}
-      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
         <div className="mb-4 flex items-center justify-between">
           <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload List</p>
           <div className="flex gap-2">
             <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 print:text-slate-700" />
-              <input type="text" placeholder="Search payloads..." value={search} onChange={e => setSearch(e.target.value)} className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 print:text-slate-700" />
+              <input type="text" placeholder="Search payloads..." value={search} onChange={e => setSearch(e.target.value)} className="rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
             </div>
-            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 px-3 py-1.5 text-sm text-slate-900 dark:text-white print:text-black focus:border-sky-500 focus:outline-none">
-              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All Statuses</option>
-              <option value="Active" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Active</option>
-              <option value="Standby" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Standby</option>
-              <option value="Maintenance" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Maintenance</option>
-              <option value="Error" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Error</option>
-              <option value="Offline" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Offline</option>
+            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm text-slate-900 dark:text-white print:text-black focus:border-sky-500 focus:outline-none">
+              <option value="" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">All Statuses</option>
+              <option value="Active" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Active</option>
+              <option value="Standby" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Standby</option>
+              <option value="Maintenance" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Maintenance</option>
+              <option value="Error" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Error</option>
+              <option value="Offline" className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">Offline</option>
             </select>
           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
+            <thead className="border-b border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800">
               <tr>
                 {[
                   { key: 'name', label: 'Payload' },
@@ -144,16 +144,16 @@ const PayloadPlanner = () => {
                   { key: 'temperature', label: 'Temp (°C)' },
                   { key: 'status', label: 'Status' },
                 ].map(col => (
-                  <th key={col.key} className="px-3 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700 cursor-pointer hover:text-slate-900 dark:text-white print:text-black transition" onClick={() => toggleSort(col.key)}>
+                  <th key={col.key} className="px-3 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-400 print:text-slate-700 cursor-pointer hover:text-slate-900 dark:text-white print:text-black transition" onClick={() => toggleSort(col.key)}>
                     {col.label} {sortKey === col.key ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                   </th>
                 ))}
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700">Actions</th>
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-400 print:text-slate-700">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
               {filteredPayloads.map(p => (
-                <tr key={p.id} className={`transition hover:bg-white dark:bg-white/5 cursor-pointer ${selectedPayload?.id === p.id ? 'bg-sky-500/10' : ''}`} onClick={() => setSelectedPayload(selectedPayload?.id === p.id ? null : p)}>
+                <tr key={p.id} className={`transition hover:bg-white dark:bg-slate-800 cursor-pointer ${selectedPayload?.id === p.id ? 'bg-sky-500/10' : ''}`} onClick={() => setSelectedPayload(selectedPayload?.id === p.id ? null : p)}>
                   <td className="px-3 py-3 text-sm font-medium text-slate-900 dark:text-white print:text-black">{p.name}</td>
                   <td className="px-3 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{p.assignedSatellite}</td>
                   <td className="px-3 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{p.type}</td>
@@ -180,32 +180,32 @@ const PayloadPlanner = () => {
 
       {/* Selected Payload Details */}
       {selectedPayload && (
-        <div className="rounded-3xl border border-sky-500/30 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <div className="rounded-3xl border border-sky-500/30 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedPayload.name} — Details</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Mission</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Mission</p>
               <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white print:text-black">{selectedPayload.assignedMission}</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Operational Hours</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Operational Hours</p>
               <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white print:text-black">{selectedPayload.operationalHours}h</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Storage Used</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Storage Used</p>
               <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white print:text-black">{selectedPayload.storage} / {selectedPayload.storageCapacity} MB</p>
               <ProgressBar value={selectedPayload.storage} max={selectedPayload.storageCapacity} showLabel={false} className="mt-2" />
             </div>
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Data Collected</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Data Collected</p>
               <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white print:text-black">{selectedPayload.dataCollected} GB</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Last Activated</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Last Activated</p>
               <p className="mt-1 text-xs text-slate-900 dark:text-white print:text-black">{new Date(selectedPayload.lastActivated).toLocaleString()}</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
-              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Next Maintenance</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
+              <p className="text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Next Maintenance</p>
               <p className="mt-1 text-xs text-slate-900 dark:text-white print:text-black">{new Date(selectedPayload.nextMaintenance).toLocaleDateString()}</p>
             </div>
           </div>
@@ -214,56 +214,56 @@ const PayloadPlanner = () => {
 
       {/* Charts */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload Usage (Hours)</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={usageData}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
-                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="hours" fill="#38bdf8" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Power Consumption (W)</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={powerData}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
-                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="power" fill="#f59e0b" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Memory Usage (MB)</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={memoryData}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
-                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="memory" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload Timeline (Hours)</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={timelineData} layout="vertical" barSize={14}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis type="number" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
-                <YAxis dataKey="name" type="category" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" width={100} tick={{ fontSize: 10 }} />
+                <XAxis type="number" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
+                <YAxis dataKey="name" type="category" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" width={100} tick={{ fontSize: 10 }} />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="operational" stackId="a" fill="#10b981" radius={[0, 0, 0, 0]} name="Operational" />
                 <Bar dataKey="remaining" stackId="a" fill="#334155" radius={[0, 6, 6, 0]} name="Remaining" />
@@ -274,14 +274,14 @@ const PayloadPlanner = () => {
       </div>
 
       {/* Payload History */}
-      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
         <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload History</p>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
+            <thead className="border-b border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800">
               <tr>
                 {['Payload', 'Action', 'Timestamp', 'Operator', 'Notes'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-600 dark:text-slate-400 print:text-slate-700">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -289,12 +289,12 @@ const PayloadPlanner = () => {
               {payloadHistory.map(h => {
                 const payload = payloadPlannerData.find(p => p.id === h.payloadId);
                 return (
-                  <tr key={h.id} className="transition hover:bg-white dark:bg-white/5">
+                  <tr key={h.id} className="transition hover:bg-white dark:bg-slate-800">
                     <td className="px-4 py-3 text-sm font-medium text-slate-900 dark:text-white print:text-black">{payload?.name || h.payloadId}</td>
                     <td className="px-4 py-3"><Badge variant={h.action === 'Activated' ? 'success' : h.action === 'Deactivated' ? 'default' : h.action === 'Error' ? 'danger' : h.action === 'Maintenance' ? 'warning' : 'info'}>{h.action}</Badge></td>
-                    <td className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{new Date(h.timestamp).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">{new Date(h.timestamp).toLocaleString()}</td>
                     <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{h.operator}</td>
-                    <td className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{h.notes}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{h.notes}</td>
                   </tr>
                 );
               })}

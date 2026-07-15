@@ -76,10 +76,10 @@ export function Table<T extends { id: string }>({
 
   if (isLoading) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white dark:border-white/10 dark:bg-white/5 print:hidden">
+      <div className="rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 print:hidden">
         <div className={`space-y-3 p-6`}>
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-10 animate-pulse rounded bg-slate-100 dark:bg-white/10" />
+            <div key={i} className="h-10 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
           ))}
         </div>
       </div>
@@ -88,16 +88,16 @@ export function Table<T extends { id: string }>({
 
   if (!data || data.length === 0) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5 print:border-slate-300">
-        <p className="text-slate-500 dark:text-slate-400 print:text-black">{emptyMessage}</p>
+      <div className="rounded-lg border border-slate-200 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-800 print:border-slate-300">
+        <p className="text-slate-600 dark:text-slate-400 print:text-black">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className={`overflow-hidden rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 print:overflow-visible ${maxHeight ? 'overflow-y-auto' : ''}`} style={{ maxHeight }}>
+    <div className={`overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 print:overflow-visible ${maxHeight ? 'overflow-y-auto' : ''}`} style={{ maxHeight }}>
       <table className="w-full text-left print:break-inside-avoid">
-        <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 backdrop-blur dark:border-white/10 dark:bg-white/5 print:bg-white print:border-slate-300">
+        <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 backdrop-blur dark:border-slate-700 dark:bg-slate-800 print:bg-white print:border-slate-300">
           <tr>
             {columns.map((col) => (
               <th
@@ -133,7 +133,7 @@ export function Table<T extends { id: string }>({
               animate={{ opacity: 1 }}
               className={`transition ${
                 hoverable ? 'hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer print:hover:bg-transparent' : ''
-              } ${striped && index % 2 === 1 ? 'bg-slate-50/50 dark:bg-white/5' : ''}`}
+              } ${striped && index % 2 === 1 ? 'bg-slate-50/50 dark:bg-slate-800' : ''}`}
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((col) => (
@@ -216,7 +216,7 @@ export function DataTable<T extends { id: string }>({
               placeholder="Search..."
               value={searchValue || ''}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 placeholder-slate-400 transition focus:border-sky-500 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-slate-500"
+              className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 placeholder-slate-400 transition focus:border-sky-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
             />
           )}
           {filters && <div className="flex flex-wrap gap-2">{filters}</div>}
@@ -227,7 +227,7 @@ export function DataTable<T extends { id: string }>({
 
       {pagination && (
         <div className="flex items-center justify-between print:hidden">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Page {pagination.currentPage} of {pagination.totalPages}
           </p>
           <div className="flex gap-2">

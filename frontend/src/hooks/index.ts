@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 export { usePageRefresh } from './usePageRefresh';
+import { useThemeContext } from '../context/ThemeContext';
 import { Mission, Recommendation, Payload, GroundStation, Satellite, CommunicationWindow, Task } from '../data/mockData';
 import { z } from 'zod';
 
@@ -528,24 +529,7 @@ export const useExport = () => {
 };
 
 // ==================== THEME HOOK ====================
-export const useTheme = () => {
-  const [isDarkMode, setIsDarkMode] = useLocalStorage('darkMode', true);
-
-  const toggleTheme = useCallback(() => {
-    setIsDarkMode(!isDarkMode);
-  }, [isDarkMode, setIsDarkMode]);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (isDarkMode) {
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  return { isDarkMode, toggleTheme };
-};
+export const useTheme = () => useThemeContext();
 
 // ==================== SEARCH HOOK ====================
 export interface SearchResults {

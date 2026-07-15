@@ -177,7 +177,7 @@ export const MissionForm: React.FC<MissionFormProps> = ({
             value={values.payload}
             onChange={handlePayloadChange}
             onBlur={handleBlur}
-            className="w-full rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-slate-900 px-4 py-2 text-slate-900 dark:text-white print:text-black transition focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500/20"
+            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 px-4 py-2 text-slate-900 dark:text-white print:text-black transition focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500/20"
           >
             {payloads.map((p) => (
               <option key={p.id} value={p.name}>
@@ -186,7 +186,7 @@ export const MissionForm: React.FC<MissionFormProps> = ({
             ))}
           </select>
           {touched.payload && errors.payload && <p className="mt-1 text-xs text-red-400">{errors.payload}</p>}
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Hold Ctrl/Cmd to select multiple payloads</p>
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 print:text-slate-700">Hold Ctrl/Cmd to select multiple payloads</p>
         </div>
 
         {/* Row 5: Start and End Time */}
@@ -214,7 +214,7 @@ export const MissionForm: React.FC<MissionFormProps> = ({
         {/* Duration (Read-only) */}
         {values.startTime && values.endTime && (
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">
+            <p className="text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">
               Estimated Duration:{' '}
               <span className="font-semibold text-slate-900 dark:text-white print:text-black">
                 {Math.round(
@@ -268,7 +268,7 @@ export const MissionForm: React.FC<MissionFormProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 border-t border-slate-200 dark:border-white/10 print:border-slate-300 pt-6">
+        <div className="flex gap-3 border-t border-slate-200 dark:border-slate-700 print:border-slate-300 pt-6">
           <Button type="submit" variant="primary" isLoading={isLoading}>
             {submitButtonLabel}
           </Button>
@@ -394,7 +394,7 @@ export const ConstraintForm: React.FC<ConstraintFormProps> = ({ initialData, onS
           />
         </div>
 
-        <div className="flex gap-3 border-t border-slate-200 dark:border-white/10 print:border-slate-300 pt-6">
+        <div className="flex gap-3 border-t border-slate-200 dark:border-slate-700 print:border-slate-300 pt-6">
           <Button type="submit" variant="primary" isLoading={isLoading}>
             Save Constraints
           </Button>

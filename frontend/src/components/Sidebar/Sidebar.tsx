@@ -23,14 +23,14 @@ const links = [
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps = {}) => {
   return (
-    <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-white p-6 lg:flex dark:border-white/10 dark:bg-slate-950/70 print:hidden">
+    <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-white p-6 lg:flex dark:border-slate-700 dark:bg-slate-950/70 print:hidden">
       <div className="mb-8 flex items-center gap-3">
         <div className="rounded-2xl bg-gradient-to-br from-sky-500 to-violet-500 p-3 text-white shadow-sm dark:shadow-glow">
           <FiZap />
         </div>
         <div>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Orbital AI</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Command Center</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400">Command Center</p>
         </div>
       </div>
 
@@ -53,9 +53,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps = {}) => {
         ))}
       </nav>
 
-      <div className="mt-auto rounded-3xl border border-sky-200 bg-slate-50 p-4 dark:border-sky-500/20 dark:bg-slate-900/80">
+      <div className="mt-auto rounded-3xl border border-sky-200 bg-slate-50 p-4 dark:border-sky-500/20 dark:bg-slate-800/80">
         <p className="text-sm font-semibold text-slate-900 dark:text-white">Mission health</p>
-        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">All orbital assets are nominal with 3 high-priority tasks queued.</p>
+        <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">All orbital assets are nominal with 3 high-priority tasks queued.</p>
       </div>
     </aside>
   );

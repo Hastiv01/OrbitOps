@@ -155,8 +155,8 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
       <AnimatePresence>
         {searchOpen && (
           <Overlay onClose={() => setSearchOpen(false)}>
-            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 print:border-slate-300 px-4 py-3">
-              <FiSearch className="text-slate-500 dark:text-slate-400 print:text-slate-700" />
+            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 print:border-slate-300 px-4 py-3">
+              <FiSearch className="text-slate-600 dark:text-slate-400 print:text-slate-700" />
               <input
                 autoFocus
                 value={searchQuery}
@@ -167,13 +167,13 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
             </div>
             <div className="max-h-80 overflow-y-auto p-2">
               {searchResults.length === 0 ? (
-                <p className="p-4 text-center text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Type to search across the mission control system</p>
+                <p className="p-4 text-center text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">Type to search across the mission control system</p>
               ) : (
                 searchResults.map((item, i) => (
                   <button
                     key={`${item.label}-${i}`}
                     onClick={() => navigateTo(item.path)}
-                    className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-white/10 print:bg-white"
+                    className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-slate-800 print:bg-white"
                   >
                     <span className="text-slate-900 dark:text-white print:text-black">{item.label}</span>
                     <Badge variant="info">{item.type}</Badge>
@@ -189,8 +189,8 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
       <AnimatePresence>
         {commandOpen && (
           <Overlay onClose={() => setCommandOpen(false)}>
-            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 print:border-slate-300 px-4 py-3">
-              <FiCommand className="text-slate-500 dark:text-slate-400 print:text-slate-700" />
+            <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 print:border-slate-300 px-4 py-3">
+              <FiCommand className="text-slate-600 dark:text-slate-400 print:text-slate-700" />
               <input
                 autoFocus
                 value={commandQuery}
@@ -204,7 +204,7 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
                 <button
                   key={item.path}
                   onClick={() => navigateTo(item.path)}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-white/10 print:bg-white"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-slate-800 print:bg-white"
                 >
                   <span className="text-slate-900 dark:text-white print:text-black">{item.label}</span>
                   <span className="text-xs text-slate-500">{item.path}</span>
@@ -215,7 +215,7 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
                   navigate('/optimization');
                   setCommandOpen(false);
                 }}
-                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-white/10 print:bg-white"
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-white dark:bg-slate-800 print:bg-white"
               >
                 <span className="text-slate-900 dark:text-white print:text-black">Run Optimization</span>
               </button>
@@ -230,7 +230,7 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
           <SidePanel title="Notification Center" onClose={() => setNotificationsOpen(false)} icon={<FiBell />}>
             <div className="space-y-3">
               {missionAlerts.filter((a) => !a.acknowledged).map((alert) => (
-                <div key={alert.id} className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+                <div key={alert.id} className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
                   <div className="flex items-center justify-between">
                     <Badge variant={alert.severity === 'Critical' ? 'danger' : alert.severity === 'High' ? 'warning' : 'info'}>
                       {alert.type}
@@ -238,7 +238,7 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
                     <span className="text-xs text-slate-500">{new Date(alert.timestamp).toLocaleTimeString()}</span>
                   </div>
                   <p className="mt-2 font-medium text-slate-900 dark:text-white print:text-black">{alert.title}</p>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{alert.message}</p>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{alert.message}</p>
                 </div>
               ))}
             </div>
@@ -250,12 +250,12 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
       <AnimatePresence>
         {helpOpen && (
           <SidePanel title="Help Center" onClose={() => setHelpOpen(false)} icon={<FiHelpCircle />}>
-            <p className="mb-4 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Keyboard shortcuts for mission control operations.</p>
+            <p className="mb-4 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">Keyboard shortcuts for mission control operations.</p>
             <div className="space-y-2">
               {shortcuts.map((s) => (
-                <div key={s.keys} className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white px-4 py-2">
+                <div key={s.keys} className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white px-4 py-2">
                   <span className="text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{s.action}</span>
-                  <kbd className="rounded bg-white dark:bg-white/10 print:bg-white px-2 py-1 text-xs text-sky-600 dark:text-sky-300 print:text-black">{s.keys}</kbd>
+                  <kbd className="rounded bg-white dark:bg-slate-800 print:bg-white px-2 py-1 text-xs text-sky-600 dark:text-sky-300 print:text-black">{s.keys}</kbd>
                 </div>
               ))}
             </div>
@@ -270,14 +270,14 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-20 right-4 z-50 w-80 rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-900/95 shadow-2xl backdrop-blur-xl"
+            className="fixed bottom-20 right-4 z-50 w-80 rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-900/95 shadow-2xl backdrop-blur-xl"
           >
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 print:border-slate-300 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 print:border-slate-300 px-4 py-3">
               <div className="flex items-center gap-2 text-slate-900 dark:text-white print:text-black">
                 <FiMessageCircle className="text-sky-400" />
                 <span className="font-medium">AI Assistant</span>
               </div>
-              <button onClick={() => setAiOpen(false)} className="text-slate-500 dark:text-slate-400 print:text-slate-700 hover:text-slate-900 dark:text-white print:text-black">
+              <button onClick={() => setAiOpen(false)} className="text-slate-600 dark:text-slate-400 print:text-slate-700 hover:text-slate-900 dark:text-white print:text-black">
                 <FiX />
               </button>
             </div>
@@ -286,20 +286,20 @@ export const GlobalFeaturesProvider: React.FC<{ children: React.ReactNode }> = (
                 <div
                   key={i}
                   className={`rounded-xl px-3 py-2 text-sm ${
-                    msg.role === 'user' ? 'ml-4 bg-sky-500/20 text-sky-100' : 'mr-4 bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 print:text-slate-800'
+                    msg.role === 'user' ? 'ml-4 bg-sky-500/20 text-sky-100' : 'mr-4 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 print:text-slate-800'
                   }`}
                 >
                   {msg.text}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 border-t border-slate-200 dark:border-white/10 print:border-slate-300 p-3">
+            <div className="flex gap-2 border-t border-slate-200 dark:border-slate-700 print:border-slate-300 p-3">
               <input
                 value={aiMessage}
                 onChange={(e) => setAiMessage(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendAiMessage()}
                 placeholder="Ask about missions..."
-                className="flex-1 rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 px-3 py-2 text-sm text-slate-900 dark:text-white print:text-black outline-none"
+                className="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white print:text-black outline-none"
               />
               <Button size="sm" onClick={sendAiMessage}>
                 Send
@@ -334,7 +334,7 @@ const Overlay: React.FC<{ children: React.ReactNode; onClose: () => void }> = ({
       initial={{ opacity: 0, scale: 0.95, y: -20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95, y: -20 }}
-      className="fixed left-1/2 top-24 z-50 w-full max-w-lg -translate-x-1/2 rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-900/95 shadow-2xl backdrop-blur-xl"
+      className="fixed left-1/2 top-24 z-50 w-full max-w-lg -translate-x-1/2 rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-900/95 shadow-2xl backdrop-blur-xl"
     >
       {children}
     </motion.div>
@@ -359,14 +359,14 @@ const SidePanel: React.FC<{
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}
-      className="fixed right-0 top-0 z-50 h-full w-full max-w-md border-l border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl"
+      className="fixed right-0 top-0 z-50 h-full w-full max-w-md border-l border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl"
     >
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2 text-slate-900 dark:text-white print:text-black">
           {icon}
           <h2 className="text-lg font-semibold">{title}</h2>
         </div>
-        <button onClick={onClose} className="rounded-lg bg-white dark:bg-white/10 print:bg-white p-2 text-slate-600 dark:text-slate-300 print:text-slate-800 hover:text-slate-900 dark:text-white print:text-black">
+        <button onClick={onClose} className="rounded-lg bg-white dark:bg-slate-800 print:bg-white p-2 text-slate-600 dark:text-slate-300 print:text-slate-800 hover:text-slate-900 dark:text-white print:text-black">
           <FiX />
         </button>
       </div>
