@@ -14,6 +14,7 @@ class Satellite(Base):
     battery_health = Column(Float, nullable=False)
     temperature = Column(Float, nullable=False)
     last_update = Column(String, nullable=False)
+    ground_station_ids = Column(String, nullable=True) # Comma-separated ground station IDs
     
     # Relationships
     payloads = relationship("Payload", back_populates="satellite", lazy="selectin")

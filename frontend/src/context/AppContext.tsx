@@ -16,6 +16,15 @@ import {
   recommendations as initialRecommendations,
 } from '../data/mockData';
 import { useMissions, useNotification, useMissionFilter, OptimizationConstraints } from '../hooks';
+import {
+  fetchMissions,
+  createMission as apiCreateMission,
+  updateMission as apiUpdateMission,
+  deleteMission as apiDeleteMission,
+  fetchSatellites,
+  fetchPayloads,
+  fetchGroundStations,
+} from '../services/api';
 
 interface AppContextType {
   // Data
@@ -67,9 +76,14 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // Missions
-  const [missionsList, setMissionsList] = React.useState<Mission[]>(initialMissions);
+  const [missionsList, setMissionsList] = React.useState<Mission[]>([]);
   const { filteredMissions, updateFilters, clearFilters } = useMissionFilter(missionsList);
   const [selectedMission, setSelectedMission] = React.useState<Mission | null>(null);
+
+  // Infrastructure lists as state variables
+  const [satellitesList, setSatellitesList] = React.useState<Satellite[]>(satellites);
+  const [payloadsList, setPayloadsList] = React.useState<Payload[]>(payloads);
+  const [groundStationsList, setGroundStationsList] = React.useState<GroundStation[]>(groundStations);
 
   // Tasks
   const [tasksList, setTasksList] = React.useState<Task[]>(initialTasks);
@@ -93,34 +107,81 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // Notifications
   const { toasts, addToast, removeToast } = useNotification();
 
+  // Load backend data on mount
+  useEffect(() => {
+    const loadBackendData = async () => {
+      try {
+        const [missionsRes, satellitesRes, payloadsRes, groundStationsRes] = await Promise.all([
+          fetchMissions(),
+          fetchSatellites(),
+          fetchPayloads(),
+          fetchGroundStations(),
+        ]);
+        
+        if (missionsRes.data) setMissionsList(missionsRes.data);
+        if (satellitesRes.data) setSatellitesList(satellitesRes.data);
+        if (payloadsRes.data) setPayloadsList(payloadsRes.data);
+        if (groundStationsRes.data) setGroundStationsList(groundStationsRes.data);
+      } catch (err) {
+        console.error('Failed to load database content, falling back to local mocks:', err);
+        setMissionsList(initialMissions);
+      }
+    };
+    
+    loadBackendData();
+  }, []);
+
   // Mission Operations
   const addMission = useCallback(
-    (mission: Mission) => {
-      setMissionsList((prev) => [mission, ...prev]);
-      addToast(`Mission "${mission.name}" created successfully`, 'success');
-      
-      // Auto-update recommendations based on new mission
+    async (mission: Mission) => {
+      try {
+        const res = await apiCreateMission(mission);
+        const savedMission = res.data || mission;
+        setMissionsList((prev) => [savedMission, ...prev]);
+        addToast(`Mission "${savedMission.name}" created successfully`, 'success');
+      } catch (err) {
+        console.error('Failed to add mission to database:', err);
+        setMissionsList((prev) => [mission, ...prev]);
+        addToast(`Mission "${mission.name}" created locally (backend offline)`, 'warning');
+      }
       generateRecommendations();
     },
     [addToast]
   );
 
   const updateMission = useCallback(
-    (id: string, updates: Partial<Mission>) => {
-      setMissionsList((prev) =>
-        prev.map((m) => (m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m))
-      );
-      addToast('Mission updated successfully', 'success');
+    async (id: string, updates: Partial<Mission>) => {
+      try {
+        const res = await apiUpdateMission(id, updates);
+        const updatedMission = res.data;
+        setMissionsList((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, ...updatedMission } : m))
+        );
+        addToast('Mission updated successfully', 'success');
+      } catch (err) {
+        console.error('Failed to update mission in database:', err);
+        setMissionsList((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m))
+        );
+        addToast('Mission updated locally (backend offline)', 'warning');
+      }
       generateRecommendations();
     },
     [addToast]
   );
 
   const deleteMission = useCallback(
-    (id: string) => {
+    async (id: string) => {
       const missionName = missionsList.find((m) => m.id === id)?.name;
-      setMissionsList((prev) => prev.filter((m) => m.id !== id));
-      addToast(`Mission "${missionName}" deleted successfully`, 'success');
+      try {
+        await apiDeleteMission(id);
+        setMissionsList((prev) => prev.filter((m) => m.id !== id));
+        addToast(`Mission "${missionName}" deleted successfully`, 'success');
+      } catch (err) {
+        console.error('Failed to delete mission from database:', err);
+        setMissionsList((prev) => prev.filter((m) => m.id !== id));
+        addToast(`Mission "${missionName}" deleted locally (backend offline)`, 'warning');
+      }
       generateRecommendations();
     },
     [missionsList, addToast]
@@ -279,9 +340,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const value: AppContextType = {
     // Data
     missions: missionsList,
-    satellites,
-    payloads,
-    groundStations,
+    satellites: satellitesList,
+    payloads: payloadsList,
+    groundStations: groundStationsList,
     communicationWindows: commWindowsList,
     tasks: tasksList,
     recommendations: recommendationsList,

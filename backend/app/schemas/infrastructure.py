@@ -15,7 +15,17 @@ class PayloadBase(BaseModel):
 class PayloadCreate(PayloadBase):
     satellite_id: Optional[str] = None
 
-class PayloadResponse(PayloadBase):
+class PayloadResponse(BaseModel):
+    id: str
+    name: str
+    type: str
+    status: str
+    powerConsumption: float
+    memoryUsage: float
+    temperature: float
+    dataRate: float
+    lastDataTransfer: str
+
     model_config = ConfigDict(from_attributes=True)
 
 class SatelliteBase(BaseModel):

@@ -1,41 +1,124 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from sqlalchemy import select
+from typing import List, Optional
 from datetime import datetime, timedelta
 
 from app.repositories.mission import MissionRepository
-from app.schemas.mission import MissionResponse, ScheduledMission, CalendarMission, SchedulerSlot
+from app.schemas.mission import MissionResponse, ScheduledMission, CalendarMission, SchedulerSlot, MissionCreate
 from app.models.mission import Mission
+from app.models.infrastructure import Satellite
 
 class MissionService:
     def __init__(self, session: AsyncSession):
         self.repo = MissionRepository(session)
 
+    def _map_mission(self, m: Mission) -> MissionResponse:
+        return MissionResponse(
+            id=m.id,
+            name=m.name,
+            missionId=m.mission_id,
+            priority=m.priority,
+            type=m.type,
+            satellite=m.satellite.name if m.satellite else "Unknown",
+            orbit=m.orbit,
+            payload=m.payload_ids.split(",") if m.payload_ids else [],
+            startTime=m.start_time,
+            endTime=m.end_time,
+            estimatedDuration=m.estimated_duration,
+            objective=m.objective or "",
+            status=m.status,
+            notes=m.notes,
+            completionPercentage=m.completion_percentage,
+            createdAt=m.created_at,
+            updatedAt=m.updated_at
+        )
+
     async def get_all_missions(self) -> List[MissionResponse]:
         missions = await self.repo.get_missions()
+        return [self._map_mission(m) for m in missions]
+
+    async def create_mission(self, mission_data: MissionCreate) -> MissionResponse:
+        # Look up satellite by name
+        sat_result = await self.repo.session.execute(
+            select(Satellite).where(Satellite.name == mission_data.satellite)
+        )
+        sat = sat_result.scalars().first()
+        sat_id = sat.id if sat else None
         
-        results = []
-        for m in missions:
-            m_dict = {
-                "id": m.id,
-                "name": m.name,
-                "missionId": m.mission_id,
-                "priority": m.priority,
-                "type": m.type,
-                "satellite": m.satellite.name if m.satellite else "Unknown",
-                "orbit": m.orbit,
-                "payload": m.payload_ids.split(",") if m.payload_ids else [],
-                "startTime": m.start_time,
-                "endTime": m.end_time,
-                "estimatedDuration": m.estimated_duration,
-                "objective": m.objective or "",
-                "status": m.status,
-                "notes": m.notes,
-                "completionPercentage": m.completion_percentage,
-                "createdAt": m.created_at,
-                "updatedAt": m.updated_at
-            }
-            results.append(MissionResponse(**m_dict))
-        return results
+        # Fallback if satellite name doesn't match
+        if not sat_id:
+            all_sats = await self.repo.session.execute(select(Satellite))
+            first_sat = all_sats.scalars().first()
+            sat_id = first_sat.id if first_sat else "SAT-001"
+            
+        payload_str = ",".join(mission_data.payload) if mission_data.payload else ""
+        
+        db_mission = Mission(
+            id=mission_data.id,
+            mission_id=mission_data.missionId,
+            name=mission_data.name,
+            priority=mission_data.priority,
+            type=mission_data.type,
+            satellite_id=sat_id,
+            orbit=mission_data.orbit,
+            payload_ids=payload_str,
+            start_time=mission_data.startTime,
+            end_time=mission_data.endTime,
+            estimated_duration=mission_data.estimatedDuration,
+            objective=mission_data.objective,
+            status=mission_data.status,
+            notes=mission_data.notes,
+            completion_percentage=mission_data.completionPercentage,
+            created_at=mission_data.createdAt or datetime.now().isoformat(),
+            updated_at=mission_data.updatedAt or datetime.now().isoformat()
+        )
+        
+        created = await self.repo.create_mission(db_mission)
+        
+        # Load the satellite relation to return mapped output
+        await self.repo.session.refresh(created, ["satellite"])
+        return self._map_mission(created)
+
+    async def update_mission(self, mission_id: str, updates: dict) -> Optional[MissionResponse]:
+        backend_updates = {}
+        
+        field_mapping = {
+            "name": "name",
+            "priority": "priority",
+            "type": "type",
+            "orbit": "orbit",
+            "startTime": "start_time",
+            "endTime": "end_time",
+            "estimatedDuration": "estimated_duration",
+            "objective": "objective",
+            "status": "status",
+            "notes": "notes",
+            "completionPercentage": "completion_percentage"
+        }
+        
+        for fe_key, val in updates.items():
+            if fe_key in field_mapping:
+                backend_updates[field_mapping[fe_key]] = val
+            elif fe_key == "payload":
+                backend_updates["payload_ids"] = ",".join(val) if val else ""
+            elif fe_key == "satellite":
+                sat_result = await self.repo.session.execute(
+                    select(Satellite).where(Satellite.name == val)
+                )
+                sat = sat_result.scalars().first()
+                if sat:
+                    backend_updates["satellite_id"] = sat.id
+                    
+        backend_updates["updated_at"] = datetime.now().isoformat()
+        
+        updated = await self.repo.update_mission(mission_id, backend_updates)
+        if not updated:
+            return None
+            
+        return self._map_mission(updated)
+
+    async def delete_mission(self, mission_id: str) -> bool:
+        return await self.repo.delete_mission(mission_id)
 
     async def get_todays_schedule(self) -> List[ScheduledMission]:
         # In a real app, query by date. Returning mock-equivalent data structure.
@@ -65,3 +148,4 @@ class MissionService:
     async def run_scheduler(self):
         # Trigger the Branch and Bound / Conflict Resolver logic
         return {"status": "success", "message": "Scheduler completed", "optimized_count": 10}
+

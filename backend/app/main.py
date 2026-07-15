@@ -4,10 +4,12 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.jobs.scheduler import start_jobs
+from app.database.database import init_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    await init_db()
     start_jobs()
     yield
     # Shutdown

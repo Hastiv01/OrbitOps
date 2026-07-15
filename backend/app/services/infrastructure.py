@@ -23,7 +23,7 @@ class InfrastructureService:
                 "batteryHealth": sat.battery_health,
                 "temperature": sat.temperature,
                 "lastUpdate": sat.last_update,
-                "groundStations": [], # Mock logic or relation needed later
+                "groundStations": sat.ground_station_ids.split(",") if sat.ground_station_ids else [],
                 "currentPayloads": [p.id for p in sat.payloads]
             }
             results.append(SatelliteResponse(**sat_dict))
@@ -31,7 +31,21 @@ class InfrastructureService:
 
     async def get_all_payloads(self) -> List[PayloadResponse]:
         payloads = await self.repo.get_payloads()
-        return [PayloadResponse.model_validate(p) for p in payloads]
+        results = []
+        for p in payloads:
+            p_dict = {
+                "id": p.id,
+                "name": p.name,
+                "type": p.type,
+                "status": p.status,
+                "powerConsumption": p.power_consumption,
+                "memoryUsage": p.memory_usage,
+                "temperature": p.temperature,
+                "dataRate": p.data_rate,
+                "lastDataTransfer": p.last_data_transfer
+            }
+            results.append(PayloadResponse(**p_dict))
+        return results
         
     async def get_all_ground_stations(self) -> List[GroundStationResponse]:
         stations = await self.repo.get_ground_stations()
