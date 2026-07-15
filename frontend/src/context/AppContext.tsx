@@ -107,6 +107,19 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // Notifications
   const { toasts, addToast, removeToast } = useNotification();
 
+  // Helper to safely extract arrays from API responses
+  const extractArray = <T,>(data: any): T[] | null => {
+    if (Array.isArray(data)) return data;
+    if (data && typeof data === 'object') {
+      // Look for an array property inside the response object
+      const keys = Object.keys(data);
+      for (const key of keys) {
+        if (Array.isArray(data[key])) return data[key];
+      }
+    }
+    return null;
+  };
+
   // Load backend data on mount
   useEffect(() => {
     const loadBackendData = async () => {
@@ -118,10 +131,15 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           fetchGroundStations(),
         ]);
         
-        if (missionsRes.data) setMissionsList(missionsRes.data);
-        if (satellitesRes.data) setSatellitesList(satellitesRes.data);
-        if (payloadsRes.data) setPayloadsList(payloadsRes.data);
-        if (groundStationsRes.data) setGroundStationsList(groundStationsRes.data);
+        const missionsArr = extractArray<Mission>(missionsRes.data);
+        const satellitesArr = extractArray<Satellite>(satellitesRes.data);
+        const payloadsArr = extractArray<Payload>(payloadsRes.data);
+        const groundStationsArr = extractArray<GroundStation>(groundStationsRes.data);
+
+        setMissionsList(missionsArr || initialMissions);
+        if (satellitesArr) setSatellitesList(satellitesArr);
+        if (payloadsArr) setPayloadsList(payloadsArr);
+        if (groundStationsArr) setGroundStationsList(groundStationsArr);
       } catch (err) {
         console.error('Failed to load database content, falling back to local mocks:', err);
         setMissionsList(initialMissions);

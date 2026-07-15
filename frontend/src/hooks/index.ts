@@ -97,9 +97,10 @@ export interface MissionFilters {
 
 export const useMissionFilter = (missions: Mission[]) => {
   const [filters, setFilters] = useState<MissionFilters>({});
+  const safeMissions = Array.isArray(missions) ? missions : [];
 
   const filteredMissions = useCallback(() => {
-    return missions.filter((mission) => {
+    return safeMissions.filter((mission) => {
       if (filters.priority && mission.priority !== filters.priority) return false;
       if (filters.status && mission.status !== filters.status) return false;
       if (filters.satellite && mission.satellite !== filters.satellite) return false;
@@ -123,7 +124,7 @@ export const useMissionFilter = (missions: Mission[]) => {
 
       return true;
     });
-  }, [missions, filters]);
+  }, [safeMissions, filters]);
 
   const updateFilters = useCallback((newFilters: Partial<MissionFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -339,7 +340,7 @@ export const useFormValidation = <T extends Record<string, any>>(
     } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
-        (error as z.ZodError<any>).errors.forEach((err: any) => {
+        (error as z.ZodError<any>).issues.forEach((err: any) => {
           const path = err.path.join('.');
           newErrors[path] = err.message;
         });
