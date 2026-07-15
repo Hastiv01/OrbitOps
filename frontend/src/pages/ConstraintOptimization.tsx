@@ -91,10 +91,10 @@ const ConstraintOptimization = () => {
   });
 
   const sliderRow = (label: string, key: keyof ConstraintConfig, min: number, max: number, unit: string, step = 1) => (
-    <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3">
-      <p className="w-40 text-sm text-slate-300">{label}</p>
+    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white px-4 py-3">
+      <p className="w-40 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{label}</p>
       <input type="range" min={min} max={max} step={step} value={constraints[key]} onChange={e => updateConstraint(key, parseFloat(e.target.value))} className="flex-1 accent-sky-500" />
-      <span className="w-20 text-right text-sm font-medium text-white">{constraints[key]}{unit}</span>
+      <span className="w-20 text-right text-sm font-medium text-slate-900 dark:text-white print:text-black">{constraints[key]}{unit}</span>
     </div>
   );
 
@@ -104,8 +104,8 @@ const ConstraintOptimization = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs text-slate-500">Dashboard &gt; Constraint Optimization</p>
-          <h1 className="text-3xl font-bold text-white">Constraint Optimization</h1>
-          <p className="mt-1 text-slate-400">Configure parameters and optimize mission schedules</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Constraint Optimization</h1>
+          <p className="mt-1 text-slate-500 dark:text-slate-400 print:text-slate-700">Configure parameters and optimize mission schedules</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
@@ -115,20 +115,20 @@ const ConstraintOptimization = () => {
 
       {/* Stat Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="text-sm text-slate-400">Optimization Score</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Optimization Score</p>
           <p className={`mt-4 text-3xl font-semibold ${optimized ? (optimizationScore > 80 ? 'text-emerald-400' : optimizationScore > 60 ? 'text-amber-400' : 'text-red-400') : 'text-slate-500'}`}>{optimized ? optimizationScore : '—'}</p>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="text-sm text-slate-400">Conflicts</p>
-          <p className="mt-4 text-3xl font-semibold text-white">{optimized ? violations.filter(v => v.severity !== 'Info').length : '—'}</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Conflicts</p>
+          <p className="mt-4 text-3xl font-semibold text-slate-900 dark:text-white print:text-black">{optimized ? violations.filter(v => v.severity !== 'Info').length : '—'}</p>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="text-sm text-slate-400">Resolved</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Resolved</p>
           <p className="mt-4 text-3xl font-semibold text-emerald-400">{optimized ? suggestedSchedule.filter(s => s.conflictFree).length : '—'}</p>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="text-sm text-slate-400">Remaining</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Remaining</p>
           <p className="mt-4 text-3xl font-semibold text-amber-400">{optimized ? suggestedSchedule.filter(s => !s.conflictFree).length : '—'}</p>
         </div>
       </div>
@@ -136,10 +136,10 @@ const ConstraintOptimization = () => {
       {/* Input + Output */}
       <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
         {/* Constraint Input Panel */}
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <div className="flex items-center gap-2 mb-4">
             <FiSliders className="text-sky-400" />
-            <p className="text-lg font-semibold text-white">Resource Constraints</p>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Constraints</p>
           </div>
           <div className="space-y-3">
             {sliderRow('Battery Threshold', 'battery', 0, 100, '%')}
@@ -160,10 +160,10 @@ const ConstraintOptimization = () => {
         {/* Results Panel */}
         <div className="space-y-6">
           {/* Violations */}
-          <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-            <p className="mb-4 text-lg font-semibold text-white">Constraint Violations</p>
+          <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+            <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Constraint Violations</p>
             {!optimized ? (
-              <p className="text-sm text-slate-400">Run optimization to see results.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Run optimization to see results.</p>
             ) : (
               <div className="space-y-3">
                 {violations.map((v, i) => (
@@ -172,7 +172,7 @@ const ConstraintOptimization = () => {
                       {v.severity === 'Critical' ? <FiAlertTriangle className="text-red-400" /> : v.severity === 'Warning' ? <FiAlertTriangle className="text-amber-400" /> : <FiCheckCircle className="text-sky-400" />}
                       <Badge variant={v.severity === 'Critical' ? 'danger' : v.severity === 'Warning' ? 'warning' : 'info'}>{v.severity}</Badge>
                     </div>
-                    <p className="mt-2 text-sm text-slate-300">{v.message}</p>
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{v.message}</p>
                   </div>
                 ))}
               </div>
@@ -181,12 +181,12 @@ const ConstraintOptimization = () => {
 
           {/* Score Gauge */}
           {optimized && (
-            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl text-center">
-              <p className="text-sm text-slate-400">Optimization Score</p>
+            <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl text-center">
+              <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Optimization Score</p>
               <div className={`mt-4 mx-auto flex h-28 w-28 items-center justify-center rounded-full border-4 ${optimizationScore > 80 ? 'border-emerald-500 text-emerald-400' : optimizationScore > 60 ? 'border-amber-500 text-amber-400' : 'border-red-500 text-red-400'}`}>
                 <span className="text-3xl font-bold">{optimizationScore}</span>
               </div>
-              <p className="mt-2 text-xs text-slate-400">{optimizationScore > 80 ? 'Excellent' : optimizationScore > 60 ? 'Good' : 'Needs Improvement'}</p>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{optimizationScore > 80 ? 'Excellent' : optimizationScore > 60 ? 'Good' : 'Needs Improvement'}</p>
             </div>
           )}
         </div>
@@ -194,30 +194,30 @@ const ConstraintOptimization = () => {
 
       {/* Charts */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="mb-4 text-lg font-semibold text-white">Power Usage vs Budget</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Power Usage vs Budget</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={powerUsageData}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="time" stroke="#94a3b8" tick={{ fontSize: 9 }} />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="time" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Area type="monotone" dataKey="used" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.2} name="Used" />
                 <Area type="monotone" dataKey="budget" stroke="#ef4444" fill="none" strokeDasharray="6 3" name="Budget" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="mb-4 text-lg font-semibold text-white">Battery Forecast</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Battery Forecast</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={batteryForecast.slice(0, 24)}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="time" stroke="#94a3b8" tick={{ fontSize: 9 }} />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="time" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Area type="monotone" dataKey="predicted" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.15} />
               </AreaChart>
             </ResponsiveContainer>
@@ -226,8 +226,8 @@ const ConstraintOptimization = () => {
       </div>
 
       {/* Conflict Heatmap */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-        <p className="mb-4 text-lg font-semibold text-white">Conflict Heatmap</p>
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Conflict Heatmap</p>
         <div className="overflow-x-auto">
           <div className="min-w-[600px]">
             <div className="flex text-[9px] text-slate-500 pl-10 mb-1">
@@ -235,7 +235,7 @@ const ConstraintOptimization = () => {
             </div>
             {days.map(day => (
               <div key={day} className="flex items-center">
-                <div className="w-10 text-xs text-slate-400">{day}</div>
+                <div className="w-10 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{day}</div>
                 <div className="flex flex-1 gap-[1px]">
                   {hours.map(h => {
                     const val = heatmap[day]?.[h] || 0;
@@ -250,25 +250,25 @@ const ConstraintOptimization = () => {
 
       {/* Suggested Schedule */}
       {optimized && (
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="mb-4 text-lg font-semibold text-white">Suggested Schedule</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Suggested Schedule</p>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b border-white/10 bg-white/5">
+              <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
                 <tr>
                   {['#', 'Mission', 'Satellite', 'Priority', 'Duration', 'Conflict Status'].map(h => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-400">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
                 {suggestedSchedule.map(m => (
-                  <tr key={m.id} className="transition hover:bg-white/5">
-                    <td className="px-4 py-3 text-sm text-slate-400">{m.optimizedOrder}</td>
-                    <td className="px-4 py-3 text-sm font-medium text-white">{m.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-300">{m.satellite}</td>
+                  <tr key={m.id} className="transition hover:bg-white dark:bg-white/5">
+                    <td className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{m.optimizedOrder}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-slate-900 dark:text-white print:text-black">{m.name}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{m.satellite}</td>
                     <td className="px-4 py-3"><Badge variant={m.priority === 'Critical' ? 'danger' : m.priority === 'High' ? 'warning' : m.priority === 'Medium' ? 'info' : 'default'}>{m.priority}</Badge></td>
-                    <td className="px-4 py-3 text-sm text-slate-300">{m.estimatedDuration} min</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{m.estimatedDuration} min</td>
                     <td className="px-4 py-3"><Badge variant={m.conflictFree ? 'success' : 'danger'}>{m.conflictFree ? 'Clear' : 'Conflict'}</Badge></td>
                   </tr>
                 ))}
@@ -279,12 +279,12 @@ const ConstraintOptimization = () => {
       )}
 
       {/* Optimization History */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-        <p className="mb-4 text-lg font-semibold text-white">Optimization History</p>
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Optimization History</p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {optimizationHistory.map(h => (
-            <div key={h.id} className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 text-center">
-              <p className="text-xs text-slate-400">{h.timestamp}</p>
+            <div key={h.id} className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3 text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{h.timestamp}</p>
               <p className={`mt-2 text-2xl font-bold ${h.score > 80 ? 'text-emerald-400' : h.score > 60 ? 'text-amber-400' : 'text-red-400'}`}>{h.score}</p>
               <p className="mt-1 text-xs text-slate-500">{h.violations} violation{h.violations !== 1 ? 's' : ''}</p>
             </div>

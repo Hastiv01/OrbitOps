@@ -57,8 +57,8 @@ const SatelliteOperations = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs text-slate-500">Dashboard &gt; Satellite Operations</p>
-          <h1 className="text-3xl font-bold text-white">Satellite Operations</h1>
-          <p className="mt-1 text-slate-400">Monitor and manage satellite fleet</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Satellite Operations</h1>
+          <p className="mt-1 text-slate-500 dark:text-slate-400 print:text-slate-700">Monitor and manage satellite fleet</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
@@ -76,29 +76,29 @@ const SatelliteOperations = () => {
         ].map(item => {
           const Icon = item.icon;
           return (
-            <div key={item.label} className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+            <div key={item.label} className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-400">{item.label}</p>
-                <div className="rounded-xl bg-sky-500/15 p-2 text-sky-300"><Icon /></div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{item.label}</p>
+                <div className="rounded-xl bg-sky-500/15 p-2 text-sky-600 dark:text-sky-300 print:text-black"><Icon /></div>
               </div>
-              <p className="mt-4 text-3xl font-semibold text-white">{item.value}</p>
+              <p className="mt-4 text-3xl font-semibold text-slate-900 dark:text-white print:text-black">{item.value}</p>
             </div>
           );
         })}
       </div>
 
       {/* Satellite List Table */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-lg font-semibold text-white">Satellite Fleet</p>
+          <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Satellite Fleet</p>
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Search satellites..." value={satSearch} onChange={e => setSatSearch(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 py-1.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 print:text-slate-700" />
+            <input type="text" placeholder="Search satellites..." value={satSearch} onChange={e => setSatSearch(e.target.value)} className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-white/10 bg-white/5">
+            <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
               <tr>
                 {[
                   { key: 'name', label: 'Name' },
@@ -109,24 +109,24 @@ const SatelliteOperations = () => {
                   { key: 'batteryHealth', label: 'Battery' },
                   { key: 'temperature', label: 'Temp (°C)' },
                 ].map(col => (
-                  <th key={col.key} className="px-4 py-3 text-left text-xs font-semibold text-slate-400 cursor-pointer hover:text-white transition" onClick={() => toggleSort(col.key)}>
+                  <th key={col.key} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700 cursor-pointer hover:text-slate-900 dark:text-white print:text-black transition" onClick={() => toggleSort(col.key)}>
                     {col.label} {sortKey === col.key ? (sortDir === 'asc' ? '↑' : '↓') : ''}
                   </th>
                 ))}
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400" />
+                <th className="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
               {filteredSatellites.map(sat => (
-                <tr key={sat.id} className={`transition hover:bg-white/5 cursor-pointer ${selectedSatellite === sat.id ? 'bg-sky-500/10' : ''}`} onClick={() => setSelectedSatellite(sat.id === selectedSatellite ? null : sat.id)}>
-                  <td className="px-4 py-3 text-sm font-medium text-white">{sat.name}</td>
+                <tr key={sat.id} className={`transition hover:bg-white dark:bg-white/5 cursor-pointer ${selectedSatellite === sat.id ? 'bg-sky-500/10' : ''}`} onClick={() => setSelectedSatellite(sat.id === selectedSatellite ? null : sat.id)}>
+                  <td className="px-4 py-3 text-sm font-medium text-slate-900 dark:text-white print:text-black">{sat.name}</td>
                   <td className="px-4 py-3"><Badge variant={sat.status === 'Active' ? 'success' : sat.status === 'Maintenance' ? 'warning' : 'danger'}>{sat.status}</Badge></td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{sat.orbit}</td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{sat.altitude.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{sat.inclination}°</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{sat.orbit}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{sat.altitude.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{sat.inclination}°</td>
                   <td className="px-4 py-3 w-32"><ProgressBar value={sat.batteryHealth} showLabel={true} /></td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{sat.temperature}°C</td>
-                  <td className="px-4 py-3"><FiChevronRight className={`text-slate-400 transition ${selectedSatellite === sat.id ? 'rotate-90' : ''}`} /></td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{sat.temperature}°C</td>
+                  <td className="px-4 py-3"><FiChevronRight className={`text-slate-500 dark:text-slate-400 print:text-slate-700 transition ${selectedSatellite === sat.id ? 'rotate-90' : ''}`} /></td>
                 </tr>
               ))}
             </tbody>
@@ -136,59 +136,59 @@ const SatelliteOperations = () => {
 
       {/* Satellite Details Panel */}
       {selectedSatData && selectedSatInfo && (
-        <div className="rounded-3xl border border-sky-500/30 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-          <p className="mb-4 text-lg font-semibold text-white">{selectedSatInfo.name} — Details</p>
+        <div className="rounded-3xl border border-sky-500/30 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedSatInfo.name} — Details</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Orbit Type</p>
-              <p className="mt-1 text-lg font-semibold text-white">{selectedSatInfo.orbit}</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Orbit Type</p>
+              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedSatInfo.orbit}</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Altitude</p>
-              <p className="mt-1 text-lg font-semibold text-white">{selectedSatInfo.altitude.toLocaleString()} km</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Altitude</p>
+              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedSatInfo.altitude.toLocaleString()} km</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Velocity</p>
-              <p className="mt-1 text-lg font-semibold text-white">{selectedSatData.velocity.toFixed(2)} km/s</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Velocity</p>
+              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedSatData.velocity.toFixed(2)} km/s</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Coverage Area</p>
-              <p className="mt-1 text-lg font-semibold text-white">{selectedSatData.coverageArea.toLocaleString()} km²</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Coverage Area</p>
+              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white print:text-black">{selectedSatData.coverageArea.toLocaleString()} km²</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Comm Status</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Comm Status</p>
               <Badge variant={selectedSatData.commStatus === 'Online' ? 'success' : selectedSatData.commStatus === 'Intermittent' ? 'warning' : 'danger'}>{selectedSatData.commStatus}</Badge>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Last Contact</p>
-              <p className="mt-1 text-sm text-white">{new Date(selectedSatData.lastContact).toLocaleTimeString()}</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Last Contact</p>
+              <p className="mt-1 text-sm text-slate-900 dark:text-white print:text-black">{new Date(selectedSatData.lastContact).toLocaleTimeString()}</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Next Contact</p>
-              <p className="mt-1 text-sm text-white">{new Date(selectedSatData.nextContact).toLocaleTimeString()}</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Next Contact</p>
+              <p className="mt-1 text-sm text-slate-900 dark:text-white print:text-black">{new Date(selectedSatData.nextContact).toLocaleTimeString()}</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-              <p className="text-xs text-slate-400">Orbit Status</p>
+            <div className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+              <p className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">Orbit Status</p>
               <Badge variant={selectedSatData.orbitStatus === 'Stable' ? 'success' : 'warning'}>{selectedSatData.orbitStatus}</Badge>
             </div>
           </div>
           {/* Telemetry Charts */}
-          <p className="mt-6 mb-3 text-sm font-semibold text-white">Telemetry (24h)</p>
+          <p className="mt-6 mb-3 text-sm font-semibold text-slate-900 dark:text-white print:text-black">Telemetry (24h)</p>
           <div className="grid gap-4 lg:grid-cols-3">
             {[
               { key: 'battery', label: 'Battery %', color: '#38bdf8' },
               { key: 'temperature', label: 'Temperature °C', color: '#f59e0b' },
               { key: 'cpuUsage', label: 'CPU Usage %', color: '#8b5cf6' },
             ].map(ch => (
-              <div key={ch.key} className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
-                <p className="mb-2 text-xs text-slate-400">{ch.label}</p>
+              <div key={ch.key} className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
+                <p className="mb-2 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{ch.label}</p>
                 <div className="h-32">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={telemetryData}>
                       <CartesianGrid stroke="rgba(148,163,184,0.1)" strokeDasharray="4 4" />
                       <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 9 }} />
                       <YAxis stroke="#64748b" tick={{ fontSize: 9 }} />
-                      <Tooltip />
+                      <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                       <Line type="monotone" dataKey={ch.key} stroke={ch.color} strokeWidth={2} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
@@ -200,15 +200,15 @@ const SatelliteOperations = () => {
       )}
 
       {/* Signal Strength Chart */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-        <p className="mb-4 text-lg font-semibold text-white">Signal Strength (24h)</p>
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Signal Strength (24h)</p>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={signalStrengthData}>
               <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-              <XAxis dataKey="time" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip />
+              <XAxis dataKey="time" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+              <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               <Line type="monotone" dataKey="Kennedy SC" stroke="#38bdf8" strokeWidth={2} dot={false} />
               <Line type="monotone" dataKey="ESA Paris" stroke="#8b5cf6" strokeWidth={2} dot={false} />
               <Line type="monotone" dataKey="Baikonur" stroke="#f59e0b" strokeWidth={2} dot={false} />
@@ -221,10 +221,10 @@ const SatelliteOperations = () => {
 
       {/* Communication Windows + Ground Stations (existing) */}
       <div className="grid gap-6 xl:grid-cols-[1fr_0.8fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-lg font-semibold text-white">Communication Windows</p>
-            <span className="text-sm text-slate-400">Today</span>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Communication Windows</p>
+            <span className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Today</span>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {communicationWindows.map(window => (
@@ -232,20 +232,20 @@ const SatelliteOperations = () => {
             ))}
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-lg font-semibold text-white">Ground Stations</p>
-            <span className="text-sm text-slate-400">Operational</span>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Ground Stations</p>
+            <span className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Operational</span>
           </div>
           <div className="space-y-3">
             {groundStations.map(station => (
-              <div key={station.id} className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
+              <div key={station.id} className="rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white p-3">
                 <div className="flex items-center justify-between">
-                  <p className="font-medium text-white">{station.name}</p>
-                  <span className="text-xs text-slate-400">{station.availability}</span>
+                  <p className="font-medium text-slate-900 dark:text-white print:text-black">{station.name}</p>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{station.availability}</span>
                 </div>
-                <p className="mt-2 text-sm text-slate-400">{station.location}</p>
-                <p className="mt-1 text-sm text-slate-400">Latency {station.latency} • {station.capacity} capacity</p>
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{station.location}</p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Latency {station.latency} • {station.capacity} capacity</p>
               </div>
             ))}
           </div>
@@ -253,15 +253,15 @@ const SatelliteOperations = () => {
       </div>
 
       {/* Communication Utilization Chart */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-        <p className="mb-4 text-lg font-semibold text-white">Communication Utilization by Station</p>
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+        <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Communication Utilization by Station</p>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={commPerStation}>
               <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-              <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 10 }} />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip />
+              <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 10 }} />
+              <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               <Bar dataKey="windows" fill="#38bdf8" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -269,32 +269,32 @@ const SatelliteOperations = () => {
       </div>
 
       {/* Ground Station Queue */}
-      <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-lg font-semibold text-white">Communication Queue</p>
+          <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Communication Queue</p>
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Search queue..." value={queueSearch} onChange={e => setQueueSearch(e.target.value)} className="rounded-lg border border-white/10 bg-white/5 py-1.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 print:text-slate-700" />
+            <input type="text" placeholder="Search queue..." value={queueSearch} onChange={e => setQueueSearch(e.target.value)} className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="border-b border-white/10 bg-white/5">
+            <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
               <tr>
                 {['Satellite', 'Station', 'Time', 'Duration', 'Priority', 'Data', 'Status', 'Type'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-400">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 print:text-slate-700">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
               {filteredQueue.map(q => (
-                <tr key={q.id} className="transition hover:bg-white/5">
-                  <td className="px-4 py-3 text-sm text-white">{q.satellite}</td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{q.station}</td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{new Date(q.scheduledTime).toLocaleTimeString()}</td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{q.duration} min</td>
+                <tr key={q.id} className="transition hover:bg-white dark:bg-white/5">
+                  <td className="px-4 py-3 text-sm text-slate-900 dark:text-white print:text-black">{q.satellite}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{q.station}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{new Date(q.scheduledTime).toLocaleTimeString()}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{q.duration} min</td>
                   <td className="px-4 py-3"><Badge variant={q.priority === 'Critical' ? 'danger' : q.priority === 'High' ? 'warning' : q.priority === 'Medium' ? 'info' : 'default'}>{q.priority}</Badge></td>
-                  <td className="px-4 py-3 text-sm text-slate-300">{q.dataSize}</td>
+                  <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">{q.dataSize}</td>
                   <td className="px-4 py-3"><Badge variant={q.status === 'Completed' ? 'success' : q.status === 'In Progress' ? 'info' : q.status === 'Failed' ? 'danger' : 'default'}>{q.status}</Badge></td>
                   <td className="px-4 py-3"><Badge variant={q.type === 'Downlink' ? 'info' : 'default'}>{q.type}</Badge></td>
                 </tr>
@@ -306,10 +306,10 @@ const SatelliteOperations = () => {
 
       {/* Payload Schedule + Visibility (existing) */}
       <div className="grid gap-6 xl:grid-cols-[1fr_0.8fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-lg font-semibold text-white">Payload Schedule</p>
-            <span className="text-sm text-slate-400">Next 6 hours</span>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload Schedule</p>
+            <span className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Next 6 hours</span>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {payloads.map(payload => (
@@ -317,10 +317,10 @@ const SatelliteOperations = () => {
             ))}
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-lg font-semibold text-white">Visibility Timeline</p>
-            <div className="rounded-full bg-sky-500/15 p-2 text-sky-300"><FiClock /></div>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white print:text-black">Visibility Timeline</p>
+            <div className="rounded-full bg-sky-500/15 p-2 text-sky-600 dark:text-sky-300 print:text-black"><FiClock /></div>
           </div>
           <div className="space-y-4">
             {[
@@ -328,9 +328,9 @@ const SatelliteOperations = () => {
               { label: 'Nova-2', time: '11:15 - 11:40' },
               { label: 'Orion-4', time: '15:35 - 16:00' },
             ].map(item => (
-              <div key={item.label} className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3">
-                <span className="font-medium text-white">{item.label}</span>
-                <span className="text-sm text-slate-400">{item.time}</span>
+              <div key={item.label} className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-50 dark:bg-slate-950/60 print:bg-white px-4 py-3">
+                <span className="font-medium text-slate-900 dark:text-white print:text-black">{item.label}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{item.time}</span>
               </div>
             ))}
           </div>

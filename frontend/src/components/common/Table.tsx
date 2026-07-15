@@ -76,10 +76,10 @@ export function Table<T extends { id: string }>({
 
   if (isLoading) {
     return (
-      <div className="rounded-lg border border-white/10 bg-white/5">
+      <div className="rounded-lg border border-slate-200 bg-white dark:border-white/10 dark:bg-white/5 print:hidden">
         <div className={`space-y-3 p-6`}>
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-10 animate-pulse rounded bg-white/10" />
+            <div key={i} className="h-10 animate-pulse rounded bg-slate-100 dark:bg-white/10" />
           ))}
         </div>
       </div>
@@ -88,31 +88,31 @@ export function Table<T extends { id: string }>({
 
   if (!data || data.length === 0) {
     return (
-      <div className="rounded-lg border border-white/10 bg-white/5 p-12 text-center">
-        <p className="text-slate-400">{emptyMessage}</p>
+      <div className="rounded-lg border border-slate-200 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5 print:border-slate-300">
+        <p className="text-slate-500 dark:text-slate-400 print:text-black">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className={`overflow-hidden rounded-lg border border-white/10 ${maxHeight ? 'overflow-y-auto' : ''}`} style={{ maxHeight }}>
-      <table className="w-full">
-        <thead className="sticky top-0 border-b border-white/10 bg-white/5 backdrop-blur">
+    <div className={`overflow-hidden rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 print:overflow-visible ${maxHeight ? 'overflow-y-auto' : ''}`} style={{ maxHeight }}>
+      <table className="w-full text-left print:break-inside-avoid">
+        <thead className="sticky top-0 border-b border-slate-200 bg-slate-50 backdrop-blur dark:border-white/10 dark:bg-white/5 print:bg-white print:border-slate-300">
           <tr>
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={`${padding} text-left text-sm font-semibold text-slate-300`}
+                className={`${padding} text-left text-sm font-semibold text-slate-700 dark:text-slate-300 print:text-black`}
                 style={{ width: col.width }}
               >
                 {col.sortable ? (
                   <button
                     onClick={() => handleSort(String(col.key))}
-                    className="flex items-center gap-2 transition hover:text-white"
+                    className="flex items-center gap-2 transition hover:text-slate-900 dark:hover:text-white print:text-black print:hover:text-black"
                   >
                     {col.label}
                     {sortKey === String(col.key) && (
-                      <motion.span initial={{ rotate: 0 }} animate={{ rotate: sortDirection === 'asc' ? 0 : 180 }}>
+                      <motion.span initial={{ rotate: 0 }} animate={{ rotate: sortDirection === 'asc' ? 0 : 180 }} className="print:hidden">
                         {sortDirection === 'asc' ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
                       </motion.span>
                     )}
@@ -122,27 +122,27 @@ export function Table<T extends { id: string }>({
                 )}
               </th>
             ))}
-            {(onEdit || onDelete) && <th className={`${padding} text-right text-sm font-semibold text-slate-300`}>Actions</th>}
+            {(onEdit || onDelete) && <th className={`${padding} text-right text-sm font-semibold text-slate-700 dark:text-slate-300 print:hidden`}>Actions</th>}
           </tr>
         </thead>
-        <tbody className="divide-y divide-white/5">
+        <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
           {sortedData.map((item, index) => (
             <motion.tr
               key={item.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className={`transition ${
-                hoverable ? 'hover:bg-white/5 cursor-pointer' : ''
-              } ${striped && index % 2 === 1 ? 'bg-white/2' : ''}`}
+                hoverable ? 'hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer print:hover:bg-transparent' : ''
+              } ${striped && index % 2 === 1 ? 'bg-slate-50/50 dark:bg-white/5' : ''}`}
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((col) => (
-                <td key={String(col.key)} className={`${padding} text-sm text-slate-200`} style={{ width: col.width }}>
+                <td key={String(col.key)} className={`${padding} text-sm text-slate-700 dark:text-slate-200 print:text-black`} style={{ width: col.width }}>
                   {col.render ? col.render(item[col.key], item, index) : String(item[col.key] || '-')}
                 </td>
               ))}
               {(onEdit || onDelete) && (
-                <td className={`${padding} text-right`}>
+                <td className={`${padding} text-right print:hidden`}>
                   <div className="flex items-center justify-end gap-2">
                     {onEdit && (
                       <Button
@@ -209,14 +209,14 @@ export function DataTable<T extends { id: string }>({
   return (
     <div className="space-y-4">
       {(onSearchChange || filters) && (
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center print:hidden">
           {onSearchChange && (
             <input
               type="text"
               placeholder="Search..."
               value={searchValue || ''}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-slate-500 transition focus:border-sky-500 focus:outline-none"
+              className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 placeholder-slate-400 transition focus:border-sky-500 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder-slate-500"
             />
           )}
           {filters && <div className="flex flex-wrap gap-2">{filters}</div>}
@@ -226,8 +226,8 @@ export function DataTable<T extends { id: string }>({
       <Table columns={columns} data={displayData} {...tableProps} />
 
       {pagination && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-400">
+        <div className="flex items-center justify-between print:hidden">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Page {pagination.currentPage} of {pagination.totalPages}
           </p>
           <div className="flex gap-2">

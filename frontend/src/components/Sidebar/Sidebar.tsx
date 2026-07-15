@@ -23,18 +23,18 @@ const links = [
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps = {}) => {
   return (
-    <aside className="hidden w-72 shrink-0 border-r border-white/10 bg-slate-950/70 p-6 lg:flex lg:flex-col">
+    <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-white p-6 lg:flex dark:border-white/10 dark:bg-slate-950/70 print:hidden">
       <div className="mb-8 flex items-center gap-3">
-        <div className="rounded-2xl bg-gradient-to-br from-sky-500 to-violet-500 p-3 text-white shadow-glow">
+        <div className="rounded-2xl bg-gradient-to-br from-sky-500 to-violet-500 p-3 text-white shadow-sm dark:shadow-glow">
           <FiZap />
         </div>
         <div>
-          <p className="text-sm font-semibold text-white">Orbital AI</p>
-          <p className="text-xs text-slate-400">Command Center</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Orbital AI</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Command Center</p>
         </div>
       </div>
 
-      <nav className="space-y-1 overflow-y-auto flex-1">
+      <nav className="flex-1 space-y-1 overflow-y-auto">
         {links.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
@@ -42,8 +42,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps = {}) => {
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-sky-500/15 text-sky-300 shadow-glow'
-                  : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                  ? 'bg-sky-50 text-sky-600 shadow-sm dark:bg-sky-500/15 dark:text-sky-300 dark:shadow-glow'
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
               }`
             }
           >
@@ -53,9 +53,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps = {}) => {
         ))}
       </nav>
 
-      <div className="mt-auto rounded-3xl border border-sky-500/20 bg-slate-900/80 p-4">
-        <p className="text-sm font-semibold text-white">Mission health</p>
-        <p className="mt-2 text-xs text-slate-400">All orbital assets are nominal with 3 high-priority tasks queued.</p>
+      <div className="mt-auto rounded-3xl border border-sky-200 bg-slate-50 p-4 dark:border-sky-500/20 dark:bg-slate-900/80">
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">Mission health</p>
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">All orbital assets are nominal with 3 high-priority tasks queued.</p>
       </div>
     </aside>
   );

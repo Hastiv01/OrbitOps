@@ -13,6 +13,9 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: #f8fafc; /* bg-slate-50 */
+  color: #0f172a; /* text-slate-900 */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dark body,
@@ -34,10 +37,61 @@ body {
 }
 
 ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+}
+.dark ::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.4);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #38bdf8, #8b5cf6);
+  background: linear-gradient(180deg, #94a3b8, #64748b);
   border-radius: 999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8, #8b5cf6);
+}
+
+/* Print UI Specific Styles */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  
+  html, body, #root {
+    background: white !important;
+    color: black !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+  
+  .dark body, .dark #root {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Prevent elements from breaking across pages awkwardly */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  table, img, svg, canvas {
+    page-break-inside: avoid;
+  }
+
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Force background colors on badges and specific elements to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Reset some basic utility overrides for print */
+  .shadow-glow, .shadow-lg, .shadow-sm {
+    box-shadow: none !important;
+  }
 }

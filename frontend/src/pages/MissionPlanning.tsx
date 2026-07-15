@@ -155,8 +155,8 @@ const MissionPlanning: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Mission Planning</h1>
-          <p className="mt-1 text-slate-400">Create and manage satellite missions</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Mission Planning</h1>
+          <p className="mt-1 text-slate-500 dark:text-slate-400 print:text-slate-700">Create and manage satellite missions</p>
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" size="md" icon={<FiFilter />} onClick={() => setShowFilters(!showFilters)}>
@@ -172,25 +172,25 @@ const MissionPlanning: React.FC = () => {
       <div className="grid gap-4 sm:grid-cols-4">
         <Card>
           <div>
-            <p className="text-sm text-slate-400">Total Missions</p>
-            <p className="mt-2 text-3xl font-bold text-white">{missions.length}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Total Missions</p>
+            <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white print:text-black">{missions.length}</p>
           </div>
         </Card>
         <Card>
           <div>
-            <p className="text-sm text-slate-400">Active</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Active</p>
             <p className="mt-2 text-3xl font-bold text-sky-400">{missions.filter((m) => m.status === 'Active').length}</p>
           </div>
         </Card>
         <Card>
           <div>
-            <p className="text-sm text-slate-400">Completed</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Completed</p>
             <p className="mt-2 text-3xl font-bold text-emerald-400">{missions.filter((m) => m.status === 'Completed').length}</p>
           </div>
         </Card>
         <Card>
           <div>
-            <p className="text-sm text-slate-400">Critical</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Critical</p>
             <p className="mt-2 text-3xl font-bold text-red-400">{missions.filter((m) => m.priority === 'Critical').length}</p>
           </div>
         </Card>
@@ -210,31 +210,31 @@ const MissionPlanning: React.FC = () => {
               placeholder="Search mission..."
               value={filters.searchTerm || ''}
               onChange={(e) => setFilters({ ...filters, searchTerm: e.target.value })}
-              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder-slate-500 transition focus:border-sky-500 focus:outline-none"
+              className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 px-4 py-2 text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 transition focus:border-sky-500 focus:outline-none"
             />
             <select
               value={filters.priority || ''}
               onChange={(e) => setFilters({ ...filters, priority: e.target.value || undefined })}
-              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white transition focus:border-sky-500 focus:outline-none"
+              className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 px-4 py-2 text-slate-900 dark:text-white print:text-black transition focus:border-sky-500 focus:outline-none"
             >
-              <option value="">All Priorities</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Critical">Critical</option>
+              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All Priorities</option>
+              <option value="Low" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Low</option>
+              <option value="Medium" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Medium</option>
+              <option value="High" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">High</option>
+              <option value="Critical" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Critical</option>
             </select>
             <select
               value={filters.status || ''}
               onChange={(e) => setFilters({ ...filters, status: e.target.value || undefined })}
-              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white transition focus:border-sky-500 focus:outline-none"
+              className="rounded-lg border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5 px-4 py-2 text-slate-900 dark:text-white print:text-black transition focus:border-sky-500 focus:outline-none"
             >
-              <option value="">All Statuses</option>
-              <option value="Planning">Planning</option>
-              <option value="Scheduled">Scheduled</option>
-              <option value="Active">Active</option>
-              <option value="Completed">Completed</option>
-              <option value="Failed">Failed</option>
-              <option value="Paused">Paused</option>
+              <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">All Statuses</option>
+              <option value="Planning" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Planning</option>
+              <option value="Scheduled" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Scheduled</option>
+              <option value="Active" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Active</option>
+              <option value="Completed" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Completed</option>
+              <option value="Failed" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Failed</option>
+              <option value="Paused" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Paused</option>
             </select>
             <Button
               variant="ghost"
@@ -268,44 +268,44 @@ const MissionPlanning: React.FC = () => {
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b border-white/10 bg-white/5">
+              <thead className="border-b border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/5">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 cursor-pointer hover:text-white transition" onClick={() => toggleSort('name')}>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800 cursor-pointer hover:text-slate-900 dark:text-white print:text-black transition" onClick={() => toggleSort('name')}>
                     Mission Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 cursor-pointer hover:text-white transition" onClick={() => toggleSort('missionId')}>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800 cursor-pointer hover:text-slate-900 dark:text-white print:text-black transition" onClick={() => toggleSort('missionId')}>
                     ID {sortConfig.key === 'missionId' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Priority</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Type</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Satellite</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300">Duration</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-slate-300">Actions</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Priority</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Type</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Satellite</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Duration</th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600 dark:text-slate-300 print:text-slate-800">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-200 dark:divide-white/5 print:divide-slate-300">
                 {paginatedMissions.map((mission, idx) => (
                   <motion.tr
                     key={mission.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="hover:bg-white/5 transition"
+                    className="hover:bg-white dark:bg-white/5 transition"
                   >
-                    <td className="px-6 py-4 text-sm text-slate-200 cursor-pointer font-medium" onClick={() => handleViewDetails(mission)}>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-200 print:text-black cursor-pointer font-medium" onClick={() => handleViewDetails(mission)}>
                       {mission.name}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-200">{mission.missionId}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-200 print:text-black">{mission.missionId}</td>
                     <td className="px-6 py-4 text-sm">
                       <Badge variant={getPriorityColor(mission.priority) as any}>{mission.priority}</Badge>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-200">{mission.type}</td>
-                    <td className="px-6 py-4 text-sm text-slate-200">{mission.satellite}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-200 print:text-black">{mission.type}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-200 print:text-black">{mission.satellite}</td>
                     <td className="px-6 py-4 text-sm">
                       <Badge variant={getStatusColor(mission.status) as any}>{mission.status}</Badge>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-200">{mission.estimatedDuration} min</td>
+                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-200 print:text-black">{mission.estimatedDuration} min</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <Button variant="ghost" size="sm" onClick={() => handleViewDetails(mission)} title="View details">
@@ -329,8 +329,8 @@ const MissionPlanning: React.FC = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
-            <p className="text-sm text-slate-400">
+          <div className="flex items-center justify-between border-t border-slate-200 dark:border-white/10 print:border-slate-300 px-6 py-4">
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">
               Page {currentPage} of {Math.ceil(filteredMissions.length / 10)} ({filteredMissions.length} results)
             </p>
             <div className="flex gap-2">
@@ -386,52 +386,52 @@ const MissionPlanning: React.FC = () => {
                   <div className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <p className="text-sm text-slate-400">Mission ID</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.missionId}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Mission ID</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.missionId}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Status</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Status</p>
                         <p className="mt-1">
                           <Badge variant={getStatusColor(selectedMission.status) as any}>{selectedMission.status}</Badge>
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Priority</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Priority</p>
                         <p className="mt-1">
                           <Badge variant={getPriorityColor(selectedMission.priority) as any}>{selectedMission.priority}</Badge>
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Type</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.type}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Type</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.type}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Satellite</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.satellite}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Satellite</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.satellite}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Orbit</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.orbit}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Orbit</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.orbit}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Duration</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.estimatedDuration} minutes</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Duration</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.estimatedDuration} minutes</p>
                       </div>
                       <div>
-                        <p className="text-sm text-slate-400">Completion</p>
-                        <p className="mt-1 font-medium text-white">{selectedMission.completionPercentage}%</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Completion</p>
+                        <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{selectedMission.completionPercentage}%</p>
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm text-slate-400">Start Time</p>
-                      <p className="mt-1 font-medium text-white">{new Date(selectedMission.startTime).toLocaleString()}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Start Time</p>
+                      <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{new Date(selectedMission.startTime).toLocaleString()}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-slate-400">End Time</p>
-                      <p className="mt-1 font-medium text-white">{new Date(selectedMission.endTime).toLocaleString()}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">End Time</p>
+                      <p className="mt-1 font-medium text-slate-900 dark:text-white print:text-black">{new Date(selectedMission.endTime).toLocaleString()}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-slate-400">Payloads</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">Payloads</p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {selectedMission.payload.map((p) => (
                           <Badge key={p} variant="info">
@@ -448,7 +448,7 @@ const MissionPlanning: React.FC = () => {
                 label: 'Objective',
                 content: (
                   <div>
-                    <p className="text-slate-200">{selectedMission.objective}</p>
+                    <p className="text-slate-700 dark:text-slate-200 print:text-black">{selectedMission.objective}</p>
                   </div>
                 ),
               },
@@ -457,7 +457,7 @@ const MissionPlanning: React.FC = () => {
                 label: 'Notes',
                 content: (
                   <div>
-                    <p className="text-slate-200">{selectedMission.notes || 'No notes'}</p>
+                    <p className="text-slate-700 dark:text-slate-200 print:text-black">{selectedMission.notes || 'No notes'}</p>
                   </div>
                 ),
               },

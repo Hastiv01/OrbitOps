@@ -41,8 +41,8 @@ const Analytics = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs text-slate-500">Dashboard &gt; Analytics</p>
-          <h1 className="text-3xl font-bold text-white">Analytics</h1>
-          <p className="mt-1 text-slate-400">Mission performance and resource analytics</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Analytics</h1>
+          <p className="mt-1 text-slate-500 dark:text-slate-400 print:text-slate-700">Mission performance and resource analytics</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
@@ -57,38 +57,38 @@ const Analytics = () => {
           { label: 'Resource Utilization', value: '72%' },
           { label: 'Average Response Time', value: '18m' },
         ].map(item => (
-          <div key={item.label} className="rounded-3xl border border-white/10 bg-white/10 p-5 shadow-glow backdrop-blur-xl">
-            <p className="text-sm text-slate-400">{item.label}</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{item.value}</p>
+          <div key={item.label} className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-white dark:bg-white/10 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+            <p className="text-sm text-slate-500 dark:text-slate-400 print:text-slate-700">{item.label}</p>
+            <p className="mt-4 text-3xl font-semibold text-slate-900 dark:text-white print:text-black">{item.value}</p>
           </div>
         ))}
       </div>
 
       {/* Existing Mission Growth + Status */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Mission Growth</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Mission Growth</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
                 <CartesianGrid stroke="rgba(148, 163, 184, 0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="missions" fill="#38bdf8" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Mission Status</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Mission Status</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={pieData} dataKey="value" innerRadius={60} outerRadius={90} paddingAngle={3}>
                   {pieData.map((entry, index) => (<Cell key={entry.name} fill={colors[index]} />))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -96,15 +96,15 @@ const Analytics = () => {
       </div>
 
       {/* Mission Success Trend */}
-      <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-        <p className="mb-4 text-lg font-semibold text-white">Mission Success Trend (12 Months)</p>
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+        <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Mission Success Trend (12 Months)</p>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={missionSuccessTrend}>
               <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip />
+              <XAxis dataKey="month" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+              <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+              <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               <Line type="monotone" dataKey="success" stroke="#10b981" strokeWidth={2} dot={false} name="Success" />
               <Line type="monotone" dataKey="failure" stroke="#ef4444" strokeWidth={2} dot={false} name="Failure" />
               <Line type="monotone" dataKey="partial" stroke="#f59e0b" strokeWidth={2} dot={false} name="Partial" />
@@ -115,22 +115,22 @@ const Analytics = () => {
 
       {/* Failure Analysis + Resource Heatmap */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Mission Failure Analysis</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Mission Failure Analysis</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={missionFailureAnalysis} layout="vertical">
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis type="number" stroke="#94a3b8" />
-                <YAxis dataKey="reason" type="category" stroke="#94a3b8" width={100} tick={{ fontSize: 11 }} />
-                <Tooltip />
+                <XAxis type="number" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis dataKey="reason" type="category" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" width={100} tick={{ fontSize: 11 }} />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="count" fill="#ef4444" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Resource Usage Heatmap</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Usage Heatmap</p>
           <div className="overflow-x-auto">
             <div className="min-w-[600px]">
               <div className="flex text-[9px] text-slate-500 pl-10 mb-1">
@@ -138,7 +138,7 @@ const Analytics = () => {
               </div>
               {days.map(day => (
                 <div key={day} className="flex items-center">
-                  <div className="w-10 text-xs text-slate-400">{day}</div>
+                  <div className="w-10 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700">{day}</div>
                   <div className="flex flex-1 gap-[1px]">
                     {hours.map(h => {
                       const val = heatmapByDayHour[day]?.[h] || 0;
@@ -155,43 +155,43 @@ const Analytics = () => {
 
       {/* Satellite + Payload + Ground Station Utilization */}
       <div className="grid gap-6 xl:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Satellite Utilization</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Satellite Utilization</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={satelliteUtilization.slice(0, 8)}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 9 }} />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="utilization" fill="#38bdf8" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Payload Utilization</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Payload Utilization</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={payloadUtilization.slice(0, 8)}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 9 }} />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="utilization" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Ground Station Usage</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Ground Station Usage</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={groundStationUsage}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 9 }} />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Bar dataKey="usage" fill="#f59e0b" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -201,30 +201,30 @@ const Analytics = () => {
 
       {/* Battery/Power Trend + Communication Trend */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Battery & Power Trend</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Battery & Power Trend</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={batteryConsumptionTrend}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="time" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="time" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Line type="monotone" dataKey="consumption" stroke="#ef4444" strokeWidth={2} dot={false} name="Consumption" />
                 <Line type="monotone" dataKey="generation" stroke="#10b981" strokeWidth={2} dot={false} name="Generation" />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Communication Trend</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Communication Trend</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={communicationTrend}>
                 <CartesianGrid stroke="rgba(148,163,184,0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="time" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="time" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Area type="monotone" dataKey="uplink" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.2} />
                 <Area type="monotone" dataKey="downlink" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.18} />
               </AreaChart>
@@ -235,30 +235,30 @@ const Analytics = () => {
 
       {/* Existing Resource Usage + Capacity */}
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Resource Usage Trend</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Usage Trend</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={resourceData}>
                 <CartesianGrid stroke="rgba(148, 163, 184, 0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Line type="monotone" dataKey="battery" stroke="#38bdf8" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="power" stroke="#8b5cf6" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Capacity Area</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Capacity Area</p>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={resourceData}>
                 <CartesianGrid stroke="rgba(148, 163, 184, 0.16)" strokeDasharray="4 4" />
-                <XAxis dataKey="name" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip />
+                <XAxis dataKey="name" stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <YAxis stroke="currentColor" className="text-slate-500 dark:text-slate-400 print:text-black" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
                 <Area type="monotone" dataKey="storage" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.18} />
               </AreaChart>
             </ResponsiveContainer>
@@ -268,57 +268,57 @@ const Analytics = () => {
 
       {/* Distribution Charts */}
       <div className="grid gap-6 xl:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Mission Type Distribution</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Mission Type Distribution</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={missionTypeDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
                   {missionTypeDistribution.map((_, i) => <Cell key={i} fill={typeColors[i]} />)}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
             {missionTypeDistribution.map((d, i) => (
-              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-400"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: typeColors[i] }} />{d.name}</span>
+              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: typeColors[i] }} />{d.name}</span>
             ))}
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Priority Distribution</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Priority Distribution</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={priorityDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
                   {priorityDistribution.map(d => <Cell key={d.name} fill={d.color} />)}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
             {priorityDistribution.map(d => (
-              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-400"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />{d.name}</span>
+              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />{d.name}</span>
             ))}
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-          <p className="mb-4 text-lg font-semibold text-white">Risk Distribution</p>
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+          <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Risk Distribution</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={riskDistribution} dataKey="value" innerRadius={55} outerRadius={80} paddingAngle={3}>
                   {riskDistribution.map(d => <Cell key={d.name} fill={d.color} />)}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
             {riskDistribution.map(d => (
-              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-400"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />{d.name}</span>
+              <span key={d.name} className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 print:text-slate-700"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />{d.name}</span>
             ))}
           </div>
         </div>

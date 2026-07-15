@@ -7,8 +7,8 @@ interface ResourceChartProps {
 
 const ResourceChart = ({ data }: ResourceChartProps) => {
   return (
-    <div className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-glow">
-      <p className="mb-4 text-lg font-semibold text-white">Resource Trend</p>
+    <div className="rounded-3xl border border-slate-200 dark:border-white/10 print:border-slate-300 bg-slate-950/70 p-4 shadow-sm dark:shadow-glow print:shadow-none">
+      <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Trend</p>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
