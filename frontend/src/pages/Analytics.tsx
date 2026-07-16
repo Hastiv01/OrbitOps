@@ -22,6 +22,7 @@ const pieData = [
 const colors = ['#38bdf8', '#8b5cf6', '#f59e0b'];
 const typeColors = ['#38bdf8', '#8b5cf6', '#f59e0b', '#10b981'];
 
+const Analytics = () => {
   const { exportToCSV, exportToJSON } = useExport();
   const { missions, triggerRefresh } = useAppContext();
   const lastUpdated = new Date().toLocaleTimeString();
