@@ -213,6 +213,35 @@ export const bandwidthForecast = generateForecast(70, -0.1);
 export const storageForecast = generateForecast(60, 0.5);
 export const cpuForecast = generateForecast(40, 0.2);
 
+// ==================== RESOURCE TREND ====================
+export interface ResourceTrendPoint {
+  time: string;
+  cpu: number;
+  memory: number;
+  storage: number;
+  power: number;
+  bandwidth: number;
+}
+
+export const generateResourceTrendData = (): ResourceTrendPoint[] => {
+  const data: ResourceTrendPoint[] = [];
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  for (let i = 0; i < 7; i++) {
+    data.push({
+      time: days[i],
+      cpu: 40 + Math.random() * 20,
+      memory: 55 + Math.random() * 20,
+      storage: 65 + Math.random() * 15,
+      power: 50 + Math.random() * 25,
+      bandwidth: 60 + Math.random() * 25,
+    });
+  }
+  return data;
+};
+
+export const resourceTrendData = generateResourceTrendData();
+
 // ==================== SUBSYSTEM HEALTH ====================
 export interface SubsystemHealth {
   name: string;

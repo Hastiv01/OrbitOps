@@ -80,7 +80,7 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Bar dataKey="missions" fill="#38bdf8" radius={[8, 8, 0, 0]} />
+                <Bar isAnimationActive={false} dataKey="missions" fill="#38bdf8" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -90,7 +90,7 @@ const Analytics = () => {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={pieData} dataKey="value" innerRadius={60} outerRadius={90} paddingAngle={3}>
+                <Pie isAnimationActive={false} data={pieData} dataKey="value" innerRadius={60} outerRadius={90} paddingAngle={3}>
                   {pieData.map((entry, index) => (<Cell key={entry.name} fill={colors[index]} />))}
                 </Pie>
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
@@ -110,9 +110,9 @@ const Analytics = () => {
               <XAxis dataKey="month" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
               <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
               <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-              <Line type="monotone" dataKey="success" stroke="#10b981" strokeWidth={2} dot={false} name="Success" />
-              <Line type="monotone" dataKey="failure" stroke="#ef4444" strokeWidth={2} dot={false} name="Failure" />
-              <Line type="monotone" dataKey="partial" stroke="#f59e0b" strokeWidth={2} dot={false} name="Partial" />
+              <Line isAnimationActive={false} type="monotone" dataKey="success" stroke="#10b981" strokeWidth={2} dot={false} name="Success" />
+              <Line isAnimationActive={false} type="monotone" dataKey="failure" stroke="#ef4444" strokeWidth={2} dot={false} name="Failure" />
+              <Line isAnimationActive={false} type="monotone" dataKey="partial" stroke="#f59e0b" strokeWidth={2} dot={false} name="Partial" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -129,7 +129,7 @@ const Analytics = () => {
                 <XAxis type="number" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis dataKey="reason" type="category" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" width={100} tick={{ fontSize: 11 }} />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Bar dataKey="count" fill="#ef4444" radius={[0, 8, 8, 0]} />
+                <Bar isAnimationActive={false} dataKey="count" fill="#ef4444" radius={[0, 8, 8, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -169,7 +169,7 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Bar dataKey="utilization" fill="#38bdf8" radius={[6, 6, 0, 0]} />
+                <Bar isAnimationActive={false} dataKey="utilization" fill="#38bdf8" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -183,7 +183,7 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Bar dataKey="utilization" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
+                <Bar isAnimationActive={false} dataKey="utilization" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -197,7 +197,7 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" tick={{ fontSize: 9 }} />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Bar dataKey="usage" fill="#f59e0b" radius={[6, 6, 0, 0]} />
+                <Bar isAnimationActive={false} dataKey="usage" fill="#f59e0b" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -215,8 +215,8 @@ const Analytics = () => {
                 <XAxis dataKey="time" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Line type="monotone" dataKey="consumption" stroke="#ef4444" strokeWidth={2} dot={false} name="Consumption" />
-                <Line type="monotone" dataKey="generation" stroke="#10b981" strokeWidth={2} dot={false} name="Generation" />
+                <Line isAnimationActive={false} type="monotone" dataKey="consumption" stroke="#ef4444" strokeWidth={2} dot={false} name="Consumption" />
+                <Line isAnimationActive={false} type="monotone" dataKey="generation" stroke="#10b981" strokeWidth={2} dot={false} name="Generation" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -230,8 +230,8 @@ const Analytics = () => {
                 <XAxis dataKey="time" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Area type="monotone" dataKey="uplink" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.2} />
-                <Area type="monotone" dataKey="downlink" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.18} />
+                <Area isAnimationActive={false} type="monotone" dataKey="uplink" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.2} />
+                <Area isAnimationActive={false} type="monotone" dataKey="downlink" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.18} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -249,8 +249,8 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Line type="monotone" dataKey="battery" stroke="#38bdf8" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="power" stroke="#8b5cf6" strokeWidth={2} dot={false} />
+                <Line isAnimationActive={false} type="monotone" dataKey="battery" stroke="#38bdf8" strokeWidth={2} dot={false} />
+                <Line isAnimationActive={false} type="monotone" dataKey="power" stroke="#8b5cf6" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -264,7 +264,7 @@ const Analytics = () => {
                 <XAxis dataKey="name" stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <YAxis stroke="currentColor" className="text-slate-600 dark:text-slate-400 print:text-black" />
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                <Area type="monotone" dataKey="storage" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.18} />
+                <Area isAnimationActive={false} type="monotone" dataKey="storage" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.18} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -278,7 +278,7 @@ const Analytics = () => {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={missionTypeDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
+                <Pie isAnimationActive={false} data={missionTypeDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
                   {missionTypeDistribution.map((_, i) => <Cell key={i} fill={typeColors[i]} />)}
                 </Pie>
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
@@ -296,7 +296,7 @@ const Analytics = () => {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={priorityDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
+                <Pie isAnimationActive={false} data={priorityDistribution} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3}>
                   {priorityDistribution.map(d => <Cell key={d.name} fill={d.color} />)}
                 </Pie>
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
@@ -314,7 +314,7 @@ const Analytics = () => {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={riskDistribution} dataKey="value" innerRadius={55} outerRadius={80} paddingAngle={3}>
+                <Pie isAnimationActive={false} data={riskDistribution} dataKey="value" innerRadius={55} outerRadius={80} paddingAngle={3}>
                   {riskDistribution.map(d => <Cell key={d.name} fill={d.color} />)}
                 </Pie>
                 <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />

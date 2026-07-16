@@ -6,7 +6,7 @@ import BatteryIndicator from '../components/BatteryStatus/BatteryIndicator';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
 import { useAppContext } from '../context/AppContext';
 import { resourceData } from '../data/dummyData';
-import { batteryForecast, powerForecast, memoryForecast, bandwidthForecast, storageForecast, cpuForecast, subsystemHealth, resourceUtilization } from '../data/extendedMockData';
+import { batteryForecast, powerForecast, memoryForecast, bandwidthForecast, storageForecast, cpuForecast, subsystemHealth, resourceUtilization, resourceTrendData } from '../data/extendedMockData';
 
 const Resources = () => {
   const [resSearch, setResSearch] = useState('');
@@ -106,15 +106,56 @@ const Resources = () => {
       </div>
 
       {/* Existing Resource Chart */}
-      <ResourceChart data={resourceData} />
+      <ResourceChart data={resourceTrendData} />
 
       {/* Resource Forecasts */}
       <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
         <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Forecasts (48h)</p>
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          {forecastCharts.map(fc => (
-            <ResourceChart key={fc.title} data={fc.data} title={fc.title} unit={fc.unit} color={fc.color} />
-          ))}
+          {forecastCharts.map(fc => {
+            const hasData = fc.data && fc.data.length > 0;
+            const currentObj = hasData ? fc.data.filter((d: any) => d.actual !== 0).pop() : null;
+            const predictedObj = hasData ? fc.data[fc.data.length - 1] : null;
+            
+            const current = currentObj ? currentObj.actual : 0;
+            const prediction = predictedObj ? predictedObj.predicted : 0;
+            const trend = prediction - current;
+            const status = Math.abs(trend) > 15 ? 'Critical' : Math.abs(trend) > 5 ? 'Warning' : 'Healthy';
+            const statusColor = status === 'Healthy' ? 'text-emerald-500' : status === 'Warning' ? 'text-amber-500' : 'text-red-500';
+
+            return (
+              <div key={fc.title} className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 overflow-hidden shadow-sm transition hover:shadow-md">
+                <div className="p-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/80">
+                  <p className="font-semibold text-slate-900 dark:text-white">{fc.title}</p>
+                </div>
+                {hasData && (
+                  <div className="px-4 py-3 grid grid-cols-4 gap-2 border-b border-slate-200 dark:border-slate-700/50 bg-slate-100/50 dark:bg-slate-900/30">
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Current</p>
+                      <p className="text-lg font-bold text-slate-900 dark:text-white">{current.toFixed(1)}<span className="text-xs font-normal text-slate-500 ml-0.5">{fc.unit}</span></p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Predict</p>
+                      <p className="text-lg font-bold text-slate-900 dark:text-white">{prediction.toFixed(1)}<span className="text-xs font-normal text-slate-500 ml-0.5">{fc.unit}</span></p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Trend</p>
+                      <p className={`text-lg font-bold ${trend > 0 ? 'text-rose-500' : trend < 0 ? 'text-emerald-500' : 'text-slate-500'}`}>
+                        {trend > 0 ? '+' : ''}{trend.toFixed(1)}<span className="text-xs font-normal opacity-70 ml-0.5">{fc.unit}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Status</p>
+                      <p className={`text-sm font-bold mt-1 ${statusColor}`}>{status}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="p-0 flex-1">
+                  <ResourceChart data={fc.data} title={fc.title} unit={fc.unit} color={fc.color} hideHeader transparent />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
