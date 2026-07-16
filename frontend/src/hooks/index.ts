@@ -346,6 +346,13 @@ export const useFormValidation = <T extends Record<string, any>>(
           newErrors[path] = err.message;
         });
         setErrors(newErrors);
+        setTouched((prev) => {
+          const newTouched = { ...prev };
+          Object.keys(newErrors).forEach((key) => {
+            newTouched[key] = true;
+          });
+          return newTouched;
+        });
       }
       return false;
     }

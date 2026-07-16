@@ -3,7 +3,6 @@ import { FiAlertTriangle, FiCpu, FiRadio, FiZap, FiRefreshCw, FiSearch, FiCheck,
 import { Badge, Button, ProgressBar, Card, Modal } from '../components/common/index';
 import { useAppContext } from '../context/AppContext';
 import RecommendationCard from '../components/RecommendationPanel/RecommendationCard';
-import { recommendations } from '../data/dummyData';
 import { recommendationDetails, type RecommendationDetail } from '../data/extendedMockData';
 
 const Recommendations = () => {
@@ -11,7 +10,7 @@ const Recommendations = () => {
   const [historySearch, setHistorySearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [recStatuses, setRecStatuses] = useState<Record<string, string>>({});
-  const { triggerRefresh } = useAppContext();
+  const { recommendations, triggerRefresh } = useAppContext();
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
 
   const getStatus = (rec: RecommendationDetail) => recStatuses[rec.id] || rec.status;

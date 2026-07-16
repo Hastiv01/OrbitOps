@@ -1,0 +1,41 @@
+payload_id,satellite_id,name,type,power_draw_w,data_rate_mbps,status
+PAY-001,SAT-015,Communication Payload 1,Communication,109.64,162.75,Active
+PAY-002,SAT-016,Radar Payload 2,Radar,204.48,496.48,Active
+PAY-003,SAT-013,Thermal Sensor Payload 3,Thermal Sensor,69.68,51.17,Standby
+PAY-004,SAT-012,Thermal Sensor Payload 4,Thermal Sensor,190.23,218.04,Active
+PAY-005,SAT-019,Spectrometer Payload 5,Spectrometer,114.37,255.36,Maintenance
+PAY-006,SAT-006,Radar Payload 6,Radar,117.25,160.24,Active
+PAY-007,SAT-001,Thermal Sensor Payload 7,Thermal Sensor,79.04,17.81,Active
+PAY-008,SAT-019,Camera Payload 8,Camera,88.16,189.23,Active
+PAY-009,SAT-013,Radar Payload 9,Radar,237.46,347.95,Active
+PAY-010,SAT-009,Spectrometer Payload 10,Spectrometer,147.91,437.63,Active
+PAY-011,SAT-013,Thermal Sensor Payload 11,Thermal Sensor,85.42,330.07,Active
+PAY-012,SAT-016,Camera Payload 12,Camera,176.64,493.68,Active
+PAY-013,SAT-004,Thermal Sensor Payload 13,Thermal Sensor,127.94,277.26,Active
+PAY-014,SAT-013,Communication Payload 14,Communication,125.77,203.48,Active
+PAY-015,SAT-018,Radar Payload 15,Radar,193.14,112.57,Active
+PAY-016,SAT-017,Thermal Sensor Payload 16,Thermal Sensor,99.46,459.12,Active
+PAY-017,SAT-001,Radar Payload 17,Radar,119.77,373.52,Standby
+PAY-018,SAT-007,Communication Payload 18,Communication,98.91,404.89,Maintenance
+PAY-019,SAT-003,Spectrometer Payload 19,Spectrometer,92.82,403.45,Active
+PAY-020,SAT-017,Spectrometer Payload 20,Spectrometer,192.25,402.06,Active
+PAY-021,SAT-001,Spectrometer Payload 21,Spectrometer,157.47,273.58,Active
+PAY-022,SAT-001,Thermal Sensor Payload 22,Thermal Sensor,245.79,285.27,Active
+PAY-023,SAT-010,Radar Payload 23,Radar,211.69,52.33,Active
+PAY-024,SAT-001,Thermal Sensor Payload 24,Thermal Sensor,65.27,11.02,Active
+PAY-025,SAT-015,Radar Payload 25,Radar,281.55,339.0,Active
+PAY-026,SAT-017,Communication Payload 26,Communication,59.54,140.37,Active
+PAY-027,SAT-009,Thermal Sensor Payload 27,Thermal Sensor,50.94,395.43,Active
+PAY-028,SAT-014,Camera Payload 28,Camera,241.36,386.74,Active
+PAY-029,SAT-016,Communication Payload 29,Communication,228.24,186.63,Active
+PAY-030,SAT-006,Camera Payload 30,Camera,176.12,414.92,Standby
+PAY-031,SAT-020,Camera Payload 31,Camera,269.27,425.2,Active
+PAY-032,SAT-002,Camera Payload 32,Camera,252.2,372.18,Active
+PAY-033,SAT-013,Thermal Sensor Payload 33,Thermal Sensor,54.18,146.89,Active
+PAY-034,SAT-010,Spectrometer Payload 34,Spectrometer,194.92,225.51,Standby
+PAY-035,SAT-009,Spectrometer Payload 35,Spectrometer,226.08,158.33,Active
+PAY-036,SAT-016,Thermal Sensor Payload 36,Thermal Sensor,261.26,360.9,Active
+PAY-037,SAT-007,Spectrometer Payload 37,Spectrometer,289.51,154.13,Active
+PAY-038,SAT-002,Camera Payload 38,Camera,280.79,259.87,Active
+PAY-039,SAT-004,Communication Payload 39,Communication,97.73,59.37,Active
+PAY-040,SAT-016,Camera Payload 40,Camera,102.22,336.28,Maintenance

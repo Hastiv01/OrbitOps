@@ -1,0 +1,16 @@
+station_id,name,latitude,longitude,elevation_m,status
+GS-001,Ground Station 1,-60.1208,89.7803,2909.2,Operational
+GS-002,Ground Station 2,-7.9138,-162.6408,2833.3,Operational
+GS-003,Ground Station 3,-32.8278,-28.3086,1173.8,Operational
+GS-004,Ground Station 4,86.3236,176.2102,1353.4,Operational
+GS-005,Ground Station 5,50.114,-161.2288,2966.6,Operational
+GS-006,Ground Station 6,-4.6754,15.6413,2817.4,Maintenance
+GS-007,Ground Station 7,-26.0972,82.2947,2615.9,Maintenance
+GS-008,Ground Station 8,-34.1715,108.7393,1466.0,Offline
+GS-009,Ground Station 9,-74.3578,-48.1941,798.3,Operational
+GS-010,Ground Station 10,51.6917,17.2421,1109.1,Maintenance
+GS-011,Ground Station 11,-1.0318,-137.538,2912.1,Operational
+GS-012,Ground Station 12,6.582,171.1785,2923.8,Maintenance
+GS-013,Ground Station 13,43.4696,42.9479,1614.0,Operational
+GS-014,Ground Station 14,26.7179,-38.996,1719.6,Operational
+GS-015,Ground Station 15,10.1392,-146.9716,865.6,Operational

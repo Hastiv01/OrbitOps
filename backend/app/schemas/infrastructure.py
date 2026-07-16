@@ -66,3 +66,22 @@ class GroundStationCreate(GroundStationBase):
 
 class GroundStationResponse(GroundStationBase):
     model_config = ConfigDict(from_attributes=True)
+
+class PayloadAssignRequest(BaseModel):
+    satellite_id: str
+
+class PayloadScheduleRequest(BaseModel):
+    satellite_id: str
+    mission_id: str
+    date: str
+    start_time: str
+    end_time: str
+    priority: str
+
+class GroundStationAssignRequest(BaseModel):
+    mission_id: str
+    satellite_id: str
+    time_window_start: str
+    time_window_end: str
+    priority: str
+

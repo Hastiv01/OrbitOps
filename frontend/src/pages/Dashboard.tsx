@@ -185,8 +185,8 @@ const Dashboard = () => {
             <div className="space-y-3">
               {communicationWindows.slice(0, 2).map(window => (
                 <div key={window.id} className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-950/50 print:bg-white p-3 text-sm text-slate-600 dark:text-slate-300 print:text-slate-800">
-                  <p className="font-medium text-slate-900 dark:text-white print:text-black">{window.station}</p>
-                  <p className="mt-1">{window.startTime} - {window.endTime}</p>
+                  <p className="font-medium text-slate-900 dark:text-white print:text-black">{window.groundStation}</p>
+                  <p className="mt-1">{new Date(window.startTime).toLocaleTimeString()} - {new Date(window.endTime).toLocaleTimeString()}</p>
                 </div>
               ))}
             </div>
@@ -243,9 +243,9 @@ const Dashboard = () => {
                 <div key={station.id} className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-3">
                   <div className="flex items-center justify-between">
                     <p className="font-medium text-slate-900 dark:text-white print:text-black">{station.name}</p>
-                    <span className="text-xs text-emerald-300">{station.availability}</span>
+                    <span className="text-xs text-emerald-300">{station.availability}%</span>
                   </div>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{station.location} • {station.latency}</p>
+                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{station.country} • {station.frequency}</p>
                 </div>
               ))}
             </div>

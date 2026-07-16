@@ -7,6 +7,7 @@ from app.repositories.mission import MissionRepository
 from app.schemas.mission import MissionResponse, ScheduledMission, CalendarMission, SchedulerSlot, MissionCreate
 from app.models.mission import Mission
 from app.models.infrastructure import Satellite
+from app.services.dataset_manager import dataset_manager
 
 class MissionService:
     def __init__(self, session: AsyncSession):
@@ -75,6 +76,18 @@ class MissionService:
         
         created = await self.repo.create_mission(db_mission)
         
+        # Sync to CSV dataset
+        dataset_manager.sync_mission({
+            'id': mission_data.id,
+            'satellite_id': sat_id,
+            'type': mission_data.type,
+            'priority': mission_data.priority,
+            'start_time': mission_data.startTime,
+            'end_time': mission_data.endTime,
+            'status': mission_data.status,
+            'estimated_duration': mission_data.estimatedDuration
+        }, action="create")
+        
         # Load the satellite relation to return mapped output
         await self.repo.session.refresh(created, ["satellite"])
         return self._map_mission(created)
@@ -115,10 +128,25 @@ class MissionService:
         if not updated:
             return None
             
+        # Sync to CSV dataset
+        dataset_manager.sync_mission({
+            'id': mission_id,
+            'satellite_id': updated.satellite_id,
+            'type': updated.type,
+            'priority': updated.priority,
+            'start_time': updated.start_time,
+            'end_time': updated.end_time,
+            'status': updated.status,
+            'estimated_duration': updated.estimated_duration
+        }, action="update")
+            
         return self._map_mission(updated)
 
     async def delete_mission(self, mission_id: str) -> bool:
-        return await self.repo.delete_mission(mission_id)
+        success = await self.repo.delete_mission(mission_id)
+        if success:
+            dataset_manager.sync_mission({'id': mission_id}, action="delete")
+        return success
 
     async def get_todays_schedule(self) -> List[ScheduledMission]:
         # In a real app, query by date. Returning mock-equivalent data structure.

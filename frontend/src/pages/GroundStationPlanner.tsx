@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Badge, Button, Modal, Input, Select, TextArea } from '../components/common/index';
 import { useExport, useNotification } from '../hooks';
 import { useAppContext } from '../context/AppContext';
+import { optimizeGroundStations, assignGroundStation } from '../services/api';
 import { groundStationPlannerData, communicationQueue, type GroundStationPlannerEntry } from '../data/extendedMockData';
 
 const weatherBadge = (w: string) => {
@@ -28,6 +29,9 @@ const GroundStationPlanner = () => {
   // Modal States
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showOptimizeModal, setShowOptimizeModal] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [optimizationResult, setOptimizationResult] = useState<any>(null);
 
   // Form States
   const [assignForm, setAssignForm] = useState({ station: '', satellite: '', startTime: '', endTime: '', priority: 'Medium' });
@@ -329,12 +333,27 @@ const GroundStationPlanner = () => {
             { value: 'Critical', label: 'Critical' }
           ]} />
           <div className="flex justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => setShowAssignModal(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => {
+            <Button variant="ghost" onClick={() => setShowAssignModal(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button variant="primary" disabled={isSubmitting} onClick={async () => {
               if (!assignForm.station || !assignForm.satellite || !assignForm.startTime) return addToast('Please fill all required fields', 'error');
-              addToast(`Station ${assignForm.station} assigned to ${assignForm.satellite}`, 'success');
-              setShowAssignModal(false);
-            }}>Save Assignment</Button>
+              setIsSubmitting(true);
+              try {
+                await assignGroundStation({
+                    mission_id: "MIS-000",
+                    satellite_id: assignForm.satellite,
+                    time_window_start: assignForm.startTime,
+                    time_window_end: assignForm.endTime,
+                    priority: assignForm.priority
+                });
+                addToast(`Station ${assignForm.station} assigned to ${assignForm.satellite}`, 'success');
+                setShowAssignModal(false);
+                triggerRefresh();
+              } catch (e: any) {
+                addToast(e.message || 'Failed to assign station', 'error');
+              } finally {
+                setIsSubmitting(false);
+              }
+            }}>{isSubmitting ? 'Saving...' : 'Save Assignment'}</Button>
           </div>
         </div>
       </Modal>
@@ -344,26 +363,85 @@ const GroundStationPlanner = () => {
           <p className="text-sm text-slate-600 dark:text-slate-400">Run optimization algorithms to improve ground station utilization and reduce latency.</p>
           <Select label="Optimization Strategy" value={optimizeForm.strategy} onChange={e => setOptimizeForm({ ...optimizeForm, strategy: e.target.value })} options={[
             { value: 'Balanced', label: 'Balanced Load' },
-            { value: 'Latency', label: 'Minimum Latency' },
-            { value: 'Availability', label: 'Maximum Availability' }
+            { value: 'Minimum Latency', label: 'Minimum Latency' },
+            { value: 'Maximum Coverage', label: 'Maximum Coverage' },
+            { value: 'Load Balancing', label: 'Load Balancing' },
+            { value: 'Minimum Cost', label: 'Minimum Cost' },
+            { value: 'Energy Efficient', label: 'Energy Efficient' }
           ]} />
           <Select label="Strict Constraints" value={optimizeForm.constraint} onChange={e => setOptimizeForm({ ...optimizeForm, constraint: e.target.value })} options={[
             { value: 'None', label: 'None' },
-            { value: 'Weather', label: 'Avoid Bad Weather' },
-            { value: 'Maintenance', label: 'Avoid Maintenance Windows' }
+            { value: 'avoid_bad_weather', label: 'Avoid Bad Weather' },
+            { value: 'high_availability_only', label: 'High Availability Only' }
           ]} />
           <Input label="Max Tolerable Latency (ms)" value={optimizeForm.maxLatency} onChange={e => setOptimizeForm({ ...optimizeForm, maxLatency: e.target.value })} type="number" />
           <div className="flex justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => setShowOptimizeModal(false)}>Cancel</Button>
-            <Button variant="primary" icon={<FiRefreshCw />} onClick={() => {
+            <Button variant="ghost" onClick={() => setShowOptimizeModal(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button variant="primary" icon={<FiRefreshCw className={isSubmitting ? 'animate-spin' : ''} />} disabled={isSubmitting} onClick={async () => {
               addToast('Routing optimization initiated...', 'info');
-              setTimeout(() => {
-                addToast('Optimization complete. Routes updated.', 'success');
+              setIsSubmitting(true);
+              try {
+                const res = await optimizeGroundStations({
+                    strategy: optimizeForm.strategy,
+                    constraints: {
+                        avoid_bad_weather: optimizeForm.constraint === 'avoid_bad_weather',
+                        high_availability_only: optimizeForm.constraint === 'high_availability_only',
+                        max_latency: optimizeForm.maxLatency
+                    }
+                });
+                setOptimizationResult(res.data);
                 setShowOptimizeModal(false);
-              }, 1500);
-            }}>Run Optimization</Button>
+                setShowResultModal(true);
+                addToast('Optimization complete.', 'success');
+              } catch (e: any) {
+                addToast(e.response?.data?.detail || e.message || 'Optimization failed', 'error');
+              } finally {
+                setIsSubmitting(false);
+              }
+            }}>{isSubmitting ? 'Optimizing...' : 'Run Optimization'}</Button>
           </div>
         </div>
+      </Modal>
+
+      <Modal isOpen={showResultModal} onClose={() => setShowResultModal(false)} title="Optimization Results" size="lg">
+        {optimizationResult && (
+            <div className="space-y-4">
+                <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+                    <p className="text-emerald-400 font-semibold mb-2">Optimization Completed Successfully</p>
+                    <p className="text-sm text-slate-300">Execution Time: {optimizationResult.execution_time_ms.toFixed(2)}ms | Improvement: {optimizationResult.improvement_percentage}%</p>
+                </div>
+                
+                <p className="text-md font-semibold text-white">Best Ground Station</p>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <p className="text-xs text-slate-400">Station</p>
+                        <p className="font-semibold text-sky-400">{optimizationResult.best_station.station_name}</p>
+                    </div>
+                    <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <p className="text-xs text-slate-400">Confidence Score</p>
+                        <p className="font-semibold text-emerald-400">{optimizationResult.best_station.confidence_score.toFixed(1)}/100</p>
+                    </div>
+                    <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <p className="text-xs text-slate-400">Expected Latency</p>
+                        <p className="font-semibold text-white">{optimizationResult.best_station.expected_latency.toFixed(1)}ms</p>
+                    </div>
+                    <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <p className="text-xs text-slate-400">Coverage</p>
+                        <p className="font-semibold text-white">{optimizationResult.best_station.coverage.toFixed(1)}%</p>
+                    </div>
+                </div>
+
+                <div className="flex justify-end gap-3 mt-6">
+                    <Button variant="ghost" onClick={() => setShowResultModal(false)}>Reject</Button>
+                    <Button variant="secondary" onClick={() => exportToJSON(optimizationResult, 'optimization_results')}>Download Result</Button>
+                    <Button variant="primary" onClick={() => {
+                        addToast(`Station ${optimizationResult.best_station.station_name} assigned successfully.`, 'success');
+                        setShowResultModal(false);
+                        triggerRefresh();
+                    }}>Accept & Assign</Button>
+                </div>
+            </div>
+        )}
       </Modal>
     </div>
   );

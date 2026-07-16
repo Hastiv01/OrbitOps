@@ -4,6 +4,8 @@ import { FiCalendar, FiClock, FiRefreshCw, FiSearch, FiZap, FiAlertTriangle, FiD
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
 import { useExport } from '../hooks';
+import { useAppContext } from '../context/AppContext';
+import { Mission, Satellite, Payload, GroundStation } from '../data/mockData';
 import { schedulerSlots, calendarMissions, todaysMissionSchedule } from '../data/extendedMockData';
 
 const priorityColors: Record<string, string> = { Critical: '#ef4444', High: '#f59e0b', Medium: '#38bdf8', Low: '#8b5cf6' };
@@ -37,13 +39,13 @@ const MissionScheduler = () => {
   }, [year, month, daysInMonth, firstDay]);
 
   const filteredMissions = useMemo(() => {
-    return missions.slice(0, 30).filter(m => {
+    return missions.slice(0, 30).filter((m: Mission) => {
       if (search && !m.name.toLowerCase().includes(search.toLowerCase()) && !m.satellite.toLowerCase().includes(search.toLowerCase())) return false;
       if (priorityFilter && m.priority !== priorityFilter) return false;
       if (statusFilter && m.status !== statusFilter) return false;
       return true;
     });
-  }, [search, priorityFilter, statusFilter]);
+  }, [search, priorityFilter, statusFilter, missions]);
 
   const conflicts = schedulerSlots.filter(s => s.hasConflict);
 
@@ -57,10 +59,10 @@ const MissionScheduler = () => {
   }));
 
   const missionsByPriority = [
-    { name: 'Critical', value: missions.filter(m => m.priority === 'Critical').length },
-    { name: 'High', value: missions.filter(m => m.priority === 'High').length },
-    { name: 'Medium', value: missions.filter(m => m.priority === 'Medium').length },
-    { name: 'Low', value: missions.filter(m => m.priority === 'Low').length },
+    { name: 'Critical', value: missions.filter((m: Mission) => m.priority === 'Critical').length },
+    { name: 'High', value: missions.filter((m: Mission) => m.priority === 'High').length },
+    { name: 'Medium', value: missions.filter((m: Mission) => m.priority === 'Medium').length },
+    { name: 'Low', value: missions.filter((m: Mission) => m.priority === 'Low').length },
   ];
 
   const runOptimization = () => {
@@ -224,7 +226,7 @@ const MissionScheduler = () => {
         <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-3 text-sm font-semibold text-slate-900 dark:text-white print:text-black">Available Satellites</p>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {satellites.filter(s => s.status === 'Active').map(s => (
+            {satellites.filter((s: Satellite) => s.status === 'Active').map((s: Satellite) => (
               <div key={s.id} className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white px-3 py-2">
                 <span className="text-sm text-slate-900 dark:text-white print:text-black">{s.name}</span>
                 <Badge variant="success">Active</Badge>
@@ -235,7 +237,7 @@ const MissionScheduler = () => {
         <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-3 text-sm font-semibold text-slate-900 dark:text-white print:text-black">Available Payloads</p>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {payloads.filter(p => p.status === 'Active' || p.status === 'Standby').map(p => (
+            {payloads.filter((p: Payload) => p.status === 'Active' || p.status === 'Standby').map((p: Payload) => (
               <div key={p.id} className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white px-3 py-2">
                 <span className="text-sm text-slate-900 dark:text-white print:text-black">{p.name}</span>
                 <Badge variant={p.status === 'Active' ? 'success' : 'info'}>{p.status}</Badge>
@@ -246,7 +248,7 @@ const MissionScheduler = () => {
         <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
           <p className="mb-3 text-sm font-semibold text-slate-900 dark:text-white print:text-black">Available Ground Stations</p>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {groundStations.filter(g => g.status === 'Operational').map(g => (
+            {groundStations.filter((g: GroundStation) => g.status === 'Operational').map((g: GroundStation) => (
               <div key={g.id} className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white px-3 py-2">
                 <span className="text-sm text-slate-900 dark:text-white print:text-black">{g.name}</span>
                 <Badge variant="success">Online</Badge>

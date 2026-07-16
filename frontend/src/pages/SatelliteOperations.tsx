@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { FiGlobe, FiRadio, FiWifi, FiClock, FiRefreshCw, FiSearch, FiChevronRight } from 'react-icons/fi';
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import CommunicationWindowCard from '../components/CommunicationWindow/CommunicationWindowCard';
@@ -6,7 +6,8 @@ import PayloadCard from '../components/PayloadCard/PayloadCard';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
 import { useAppContext } from '../context/AppContext';
 import { communicationWindows, groundStations, payloads } from '../data/dummyData';
-import { satelliteHealthSummaries, generateTelemetryData, signalStrengthData, communicationQueue } from '../data/extendedMockData';
+import { satelliteHealthSummaries, signalStrengthData, communicationQueue } from '../data/extendedMockData';
+import { fetchTelemetry } from '../services/api';
 
 const SatelliteOperations = () => {
   const [satSearch, setSatSearch] = useState('');
@@ -16,6 +17,7 @@ const SatelliteOperations = () => {
   const [queueSearch, setQueueSearch] = useState('');
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
   const { satellites, triggerRefresh } = useAppContext();
+  const [telemetryData, setTelemetryData] = useState<any[]>([]);
 
   const filteredSatellites = useMemo(() => {
     let sats = satellites.filter(s =>
@@ -34,7 +36,21 @@ const SatelliteOperations = () => {
 
   const selectedSatData = selectedSatellite ? satelliteHealthSummaries.find(s => s.id === selectedSatellite) : null;
   const selectedSatInfo = selectedSatellite ? satellites.find(s => s.id === selectedSatellite) : null;
-  const telemetryData = selectedSatellite ? generateTelemetryData(selectedSatInfo?.name || '') : [];
+  
+  useEffect(() => {
+    if (selectedSatellite) {
+      fetchTelemetry(selectedSatellite)
+        .then(res => {
+          setTelemetryData(res.data || []);
+        })
+        .catch(err => {
+          console.error('Failed to fetch telemetry:', err);
+          setTelemetryData([]);
+        });
+    } else {
+      setTelemetryData([]);
+    }
+  }, [selectedSatellite]);
 
   const toggleSort = (key: string) => {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');

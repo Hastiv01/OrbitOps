@@ -99,7 +99,7 @@ export const generatePDFReport = (data: any[], filename: string, title: string =
     margin: { top: 15, right: 14, bottom: 15, left: 14 },
     didDrawPage: function (data) {
       // Footer
-      const str = 'Page ' + doc.internal.getNumberOfPages();
+      const str = 'Page ' + (doc as any).internal.getNumberOfPages();
       doc.setFontSize(8);
       doc.setTextColor(148, 163, 184); // slate-400
       doc.text(

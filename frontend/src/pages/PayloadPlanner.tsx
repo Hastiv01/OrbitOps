@@ -5,6 +5,7 @@ import { Badge, Button, ProgressBar, Modal, Input, Select, TextArea } from '../c
 import { useExport, useNotification } from '../hooks';
 import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import { assignPayload, schedulePayload, requestMaintenance, updatePayloadStatus } from '../services/api';
 import { payloadPlannerData, payloadHistory, type PayloadPlannerEntry } from '../data/extendedMockData';
 
 const PayloadPlanner = () => {
@@ -20,6 +21,7 @@ const PayloadPlanner = () => {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form States
   const [assignForm, setAssignForm] = useState({ name: '', type: 'Camera', satellite: '', weight: '', power: '', dataRate: '' });
@@ -176,10 +178,28 @@ const PayloadPlanner = () => {
                   <td className="px-3 py-3">
                     <div className="flex gap-1" onClick={e => e.stopPropagation()}>
                       {(getStatus(p) === 'Standby' || getStatus(p) === 'Offline') && (
-                        <Button variant="success" size="sm" icon={<FiPlay />} onClick={() => setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Active' }))}>Activate</Button>
+                        <Button variant="success" size="sm" icon={<FiPlay />} onClick={async () => {
+                            try {
+                                await updatePayloadStatus(p.id, 'Active');
+                                setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Active' }));
+                                triggerRefresh();
+                                addToast('Payload activated', 'success');
+                            } catch(e) {
+                                addToast('Failed to activate', 'error');
+                            }
+                        }}>Activate</Button>
                       )}
                       {getStatus(p) === 'Active' && (
-                        <Button variant="secondary" size="sm" icon={<FiPause />} onClick={() => setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Standby' }))}>Deactivate</Button>
+                        <Button variant="secondary" size="sm" icon={<FiPause />} onClick={async () => {
+                            try {
+                                await updatePayloadStatus(p.id, 'Standby');
+                                setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Standby' }));
+                                triggerRefresh();
+                                addToast('Payload deactivated', 'success');
+                            } catch(e) {
+                                addToast('Failed to deactivate', 'error');
+                            }
+                        }}>Deactivate</Button>
                       )}
                     </div>
                   </td>
@@ -338,12 +358,23 @@ const PayloadPlanner = () => {
             <Input label="Data Rate" value={assignForm.dataRate} onChange={e => setAssignForm({ ...assignForm, dataRate: e.target.value })} placeholder="e.g., 50 Mbps" />
           </div>
           <div className="flex justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => setShowAssignModal(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => {
+            <Button variant="ghost" onClick={() => setShowAssignModal(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button variant="primary" disabled={isSubmitting} onClick={async () => {
               if (!assignForm.name || !assignForm.satellite) return addToast('Please fill all required fields', 'error');
-              addToast(`Payload ${assignForm.name} assigned to ${assignForm.satellite}`, 'success');
-              setShowAssignModal(false);
-            }}>Save Assignment</Button>
+              setIsSubmitting(true);
+              try {
+                  const payloadMatch = payloadPlannerData.find(x => x.name === assignForm.name);
+                  const payloadId = payloadMatch ? payloadMatch.id : "PLD-000";
+                  await assignPayload(payloadId, { satellite_id: assignForm.satellite });
+                  addToast(`Payload ${assignForm.name} assigned to ${assignForm.satellite}`, 'success');
+                  setShowAssignModal(false);
+                  triggerRefresh();
+              } catch(e: any) {
+                  addToast(e.message || 'Failed to assign payload', 'error');
+              } finally {
+                  setIsSubmitting(false);
+              }
+            }}>{isSubmitting ? 'Saving...' : 'Save Assignment'}</Button>
           </div>
         </div>
       </Modal>
@@ -368,12 +399,30 @@ const PayloadPlanner = () => {
             <Input label="End Time" value={scheduleForm.endTime} onChange={e => setScheduleForm({ ...scheduleForm, endTime: e.target.value })} type="time" />
           </div>
           <div className="flex justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => setShowScheduleModal(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => {
+            <Button variant="ghost" onClick={() => setShowScheduleModal(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button variant="primary" disabled={isSubmitting} onClick={async () => {
               if (!scheduleForm.payload || !scheduleForm.date || !scheduleForm.startTime) return addToast('Please fill all required fields', 'error');
-              addToast(`Payload ${scheduleForm.payload} scheduled successfully`, 'success');
-              setShowScheduleModal(false);
-            }}>Save Schedule</Button>
+              setIsSubmitting(true);
+              try {
+                  const payloadMatch = payloadPlannerData.find(x => x.name === scheduleForm.payload);
+                  const payloadId = payloadMatch ? payloadMatch.id : "PLD-000";
+                  await schedulePayload(payloadId, {
+                      satellite_id: scheduleForm.satellite || "SAT-000",
+                      mission_id: "MIS-000",
+                      date: scheduleForm.date,
+                      start_time: scheduleForm.startTime,
+                      end_time: scheduleForm.endTime,
+                      priority: scheduleForm.priority
+                  });
+                  addToast(`Payload ${scheduleForm.payload} scheduled successfully`, 'success');
+                  setShowScheduleModal(false);
+                  triggerRefresh();
+              } catch(e: any) {
+                  addToast('Failed to schedule payload', 'error');
+              } finally {
+                  setIsSubmitting(false);
+              }
+            }}>{isSubmitting ? 'Saving...' : 'Save Schedule'}</Button>
           </div>
         </div>
       </Modal>
@@ -398,14 +447,31 @@ const PayloadPlanner = () => {
           ]} />
           <TextArea label="Reason" value={maintenanceForm.reason} onChange={e => setMaintenanceForm({ ...maintenanceForm, reason: e.target.value })} placeholder="Describe the maintenance requirement..." />
           <div className="flex justify-end gap-3 mt-6">
-            <Button variant="ghost" onClick={() => setShowMaintenanceModal(false)}>Cancel</Button>
-            <Button variant="primary" onClick={() => {
+            <Button variant="ghost" onClick={() => setShowMaintenanceModal(false)} disabled={isSubmitting}>Cancel</Button>
+            <Button variant="primary" disabled={isSubmitting} onClick={async () => {
               if (!maintenanceForm.payload || !maintenanceForm.reason) return addToast('Please fill all required fields', 'error');
-              const p = payloadPlannerData.find(x => x.name === maintenanceForm.payload);
-              if (p) setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Maintenance' }));
-              addToast(`Maintenance requested for ${maintenanceForm.payload}`, 'success');
-              setShowMaintenanceModal(false);
-            }}>Submit Request</Button>
+              setIsSubmitting(true);
+              try {
+                  const p = payloadPlannerData.find(x => x.name === maintenanceForm.payload);
+                  await requestMaintenance({
+                      target_type: 'Payload',
+                      target_id: p ? p.id : "PLD-000",
+                      maintenance_type: maintenanceForm.type,
+                      reason: maintenanceForm.reason,
+                      priority: maintenanceForm.priority,
+                      engineer: 'System Auto',
+                      estimated_duration: 2.5
+                  });
+                  if (p) setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Maintenance' }));
+                  addToast(`Maintenance requested for ${maintenanceForm.payload}`, 'success');
+                  setShowMaintenanceModal(false);
+                  triggerRefresh();
+              } catch(e: any) {
+                  addToast('Failed to request maintenance', 'error');
+              } finally {
+                  setIsSubmitting(false);
+              }
+            }}>{isSubmitting ? 'Submitting...' : 'Submit Request'}</Button>
           </div>
         </div>
       </Modal>

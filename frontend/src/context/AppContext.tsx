@@ -24,6 +24,7 @@ import {
   fetchSatellites,
   fetchPayloads,
   fetchGroundStations,
+  fetchRecommendations,
 } from '../services/api';
 
 interface AppContextType {
@@ -128,34 +129,40 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     return null;
   };
 
-  // Load backend data on mount
-  useEffect(() => {
-    const loadBackendData = async () => {
-      try {
-        const [missionsRes, satellitesRes, payloadsRes, groundStationsRes] = await Promise.all([
-          fetchMissions(),
-          fetchSatellites(),
-          fetchPayloads(),
-          fetchGroundStations(),
-        ]);
-        
-        const missionsArr = extractArray<Mission>(missionsRes.data);
-        const satellitesArr = extractArray<Satellite>(satellitesRes.data);
-        const payloadsArr = extractArray<Payload>(payloadsRes.data);
-        const groundStationsArr = extractArray<GroundStation>(groundStationsRes.data);
+  const loadBackendData = useCallback(async () => {
+    try {
+      const [missionsRes, satellitesRes, payloadsRes, groundStationsRes, recommendationsRes] = await Promise.all([
+        fetchMissions(),
+        fetchSatellites(),
+        fetchPayloads(),
+        fetchGroundStations(),
+        fetchRecommendations().catch(() => ({ data: [] })), // Catch if backend recommendations fail
+      ]);
+      
+      const missionsArr = extractArray<Mission>(missionsRes.data);
+      const satellitesArr = extractArray<Satellite>(satellitesRes.data);
+      const payloadsArr = extractArray<Payload>(payloadsRes.data);
+      const groundStationsArr = extractArray<GroundStation>(groundStationsRes.data);
+      const recommendationsArr = extractArray<Recommendation>(recommendationsRes.data);
 
-        setMissionsList(missionsArr || initialMissions);
-        if (satellitesArr) setSatellitesList(satellitesArr);
-        if (payloadsArr) setPayloadsList(payloadsArr);
-        if (groundStationsArr) setGroundStationsList(groundStationsArr);
-      } catch (err) {
-        console.error('Failed to load database content, falling back to local mocks:', err);
-        setMissionsList(initialMissions);
+      setMissionsList(missionsArr || initialMissions);
+      if (satellitesArr) setSatellitesList(satellitesArr);
+      if (payloadsArr) setPayloadsList(payloadsArr);
+      if (groundStationsArr) setGroundStationsList(groundStationsArr);
+      
+      if (recommendationsArr && recommendationsArr.length > 0) {
+          setRecommendationsList(recommendationsArr);
       }
-    };
-    
-    loadBackendData();
+    } catch (err) {
+      console.error('Failed to load database content, falling back to local mocks:', err);
+      setMissionsList(initialMissions);
+    }
   }, []);
+
+  // Load backend data on mount and when refreshTrigger changes
+  useEffect(() => {
+    loadBackendData();
+  }, [loadBackendData, refreshTrigger]);
 
   // Mission Operations
   const addMission = useCallback(
@@ -170,9 +177,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setMissionsList((prev) => [mission, ...prev]);
         addToast(`Mission "${mission.name}" created locally (backend offline)`, 'warning');
       }
-      generateRecommendations();
+      triggerRefresh();
     },
-    [addToast]
+    [addToast, triggerRefresh]
   );
 
   const updateMission = useCallback(
@@ -191,9 +198,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         );
         addToast('Mission updated locally (backend offline)', 'warning');
       }
-      generateRecommendations();
+      triggerRefresh();
     },
-    [addToast]
+    [addToast, triggerRefresh]
   );
 
   const deleteMission = useCallback(
@@ -208,9 +215,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setMissionsList((prev) => prev.filter((m) => m.id !== id));
         addToast(`Mission "${missionName}" deleted locally (backend offline)`, 'warning');
       }
-      generateRecommendations();
+      triggerRefresh();
     },
-    [missionsList, addToast]
+    [missionsList, addToast, triggerRefresh]
   );
 
   const duplicateMission = useCallback(

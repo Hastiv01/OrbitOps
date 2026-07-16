@@ -51,28 +51,6 @@ const Resources = () => {
     { title: 'Memory Forecast', data: memoryForecast, color: '#38bdf8', unit: '%' },
   ];
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-slate-900/95 border border-slate-700/50 p-3 rounded-lg shadow-xl backdrop-blur-md">
-          <p className="text-slate-300 text-xs mb-2">{label}</p>
-          <div className="space-y-1">
-            {data.actual > 0 && (
-              <p className="text-white text-sm"><span className="text-slate-400">Actual:</span> {data.actual.toFixed(1)}</p>
-            )}
-            <p className="text-sky-400 text-sm"><span className="text-slate-400">Predicted:</span> {data.predicted.toFixed(1)}</p>
-            <p className="text-emerald-400 text-xs"><span className="text-slate-400">Upper:</span> {data.upperBound.toFixed(1)}</p>
-            <p className="text-rose-400 text-xs"><span className="text-slate-400">Lower:</span> {data.lowerBound.toFixed(1)}</p>
-            <p className="text-slate-300 text-xs"><span className="text-slate-400">Diff:</span> {(data.upperBound - data.lowerBound).toFixed(1)}</p>
-            <p className="text-violet-300 text-xs"><span className="text-slate-400">Confidence:</span> 95%</p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -135,47 +113,7 @@ const Resources = () => {
         <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Resource Forecasts (48h)</p>
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
           {forecastCharts.map(fc => (
-            <div key={fc.title} className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-4">
-              <p className="mb-2 text-sm font-medium text-slate-900 dark:text-white print:text-black">{fc.title}</p>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={fc.data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="rgba(148,163,184,0.1)" strokeDasharray="4 4" />
-                    <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 10 }} interval={5} />
-                    <YAxis stroke="#64748b" tick={{ fontSize: 10 }} label={{ value: fc.unit, angle: -90, position: 'insideLeft', style: { fill: '#64748b', fontSize: 10 } }} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
-                    {/* Confidence interval band */}
-                    <Area 
-                      type="monotone" 
-                      dataKey={(data) => [data.lowerBound, data.upperBound]} 
-                      stroke="none" 
-                      fill={fc.color} 
-                      fillOpacity={0.15} 
-                      name="95% Confidence Interval"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="actual" 
-                      stroke={fc.color} 
-                      strokeWidth={2} 
-                      dot={false} 
-                      name="Actual"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="predicted" 
-                      stroke={fc.color} 
-                      strokeWidth={2} 
-                      strokeDasharray="4 4" 
-                      dot={false} 
-                      name="Predicted"
-                    />
-                    <Brush dataKey="time" height={20} stroke="#64748b" fill="rgba(15, 23, 42, 0.5)" tickFormatter={() => ''} />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+            <ResourceChart key={fc.title} data={fc.data} title={fc.title} unit={fc.unit} color={fc.color} />
           ))}
         </div>
       </div>

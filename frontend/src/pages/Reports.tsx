@@ -81,7 +81,7 @@ const Reports = () => {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white print:text-black">Reports</h1>
           <p className="mt-1 text-slate-600 dark:text-slate-400 print:text-slate-700">Generate and export mission reports</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 print:hidden">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
           <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
@@ -109,7 +109,7 @@ const Reports = () => {
       </div>
 
       {/* Filters + Generate */}
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl print:hidden">
         <p className="mb-4 text-lg font-semibold text-slate-900 dark:text-white print:text-black">Generate Report</p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <div>
@@ -255,7 +255,7 @@ const Reports = () => {
           label: 'System Logs',
           content: (
             <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
-              <div className="mb-4 flex gap-2">
+              <div className="mb-4 flex gap-2 print:hidden">
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 print:text-slate-700" />
                   <input type="text" placeholder="Search logs..." value={logSearch} onChange={e => setLogSearch(e.target.value)} className="rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />
@@ -296,7 +296,7 @@ const Reports = () => {
           label: 'Alerts',
           content: (
             <div className="rounded-3xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 print:bg-white p-5 shadow-sm dark:shadow-glow print:shadow-none backdrop-blur-xl">
-              <div className="mb-4">
+              <div className="mb-4 print:hidden">
                 <div className="relative max-w-xs">
                   <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 print:text-slate-700" />
                   <input type="text" placeholder="Search alerts..." value={alertSearch} onChange={e => setAlertSearch(e.target.value)} className="w-full rounded-lg border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-white dark:bg-slate-800 py-1.5 pl-9 pr-4 text-sm text-slate-900 dark:text-white print:text-black placeholder-slate-400 dark:placeholder-slate-500 focus:border-sky-500 focus:outline-none" />

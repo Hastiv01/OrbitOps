@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import type { Mission } from '../../types';
+import type { Mission } from '../../data/mockData';
 
 interface MissionTimelineProps {
   missions: Mission[];
@@ -27,7 +27,7 @@ const MissionTimeline = ({ missions }: MissionTimelineProps) => {
                 <p className="text-sm text-slate-600 dark:text-slate-400 print:text-slate-700">{mission.startTime} → {mission.endTime}</p>
               </div>
               <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
-                <div className="h-full rounded-full bg-gradient-to-r from-sky-400 to-violet-500" style={{ width: `${mission.progress}%` }} />
+                <div className="h-full rounded-full bg-gradient-to-r from-sky-400 to-violet-500" style={{ width: `${mission.completionPercentage}%` }} />
               </div>
             </motion.div>
           </div>

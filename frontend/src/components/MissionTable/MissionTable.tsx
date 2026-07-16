@@ -1,4 +1,4 @@
-import type { Mission } from '../../types';
+import type { Mission } from '../../data/mockData';
 
 interface MissionTableProps {
   missions: Mission[];
