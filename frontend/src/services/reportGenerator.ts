@@ -97,7 +97,7 @@ export const generatePDFReport = (data: any[], filename: string, title: string =
       cellPadding: 4 
     },
     margin: { top: 15, right: 14, bottom: 15, left: 14 },
-    didDrawPage: function (data) {
+    didDrawPage: function (data: any) {
       // Footer
       const str = 'Page ' + (doc as any).internal.getNumberOfPages();
       doc.setFontSize(8);
