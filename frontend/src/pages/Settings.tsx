@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { FiMoon, FiBell, FiShield, FiSliders, FiSun, FiSave, FiSearch, FiGlobe, FiRadio, FiServer } from 'react-icons/fi';
 import { Badge, Button, Card, Tabs } from '../components/common/index';
-import { satellites, groundStations } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 import { systemLogs } from '../data/extendedMockData';
 import { useTheme, useNotification } from '../hooks';
 
@@ -14,6 +14,7 @@ const Settings = () => {
   const [apiConfig, setApiConfig] = useState({ endpoint: 'https://api.orbitops.space/v1', apiKey: '', timeout: '30' });
   const [logSearch, setLogSearch] = useState('');
   const [logLevel, setLogLevel] = useState('');
+  const { satellites, groundStations } = useAppContext();
   const [satMonitoring, setSatMonitoring] = useState<Record<string, boolean>>(Object.fromEntries(satellites.map(s => [s.id, s.status === 'Active'])));
   const [gsMonitoring, setGsMonitoring] = useState<Record<string, boolean>>(Object.fromEntries(groundStations.map(g => [g.id, g.status === 'Operational'])));
 

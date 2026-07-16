@@ -66,6 +66,10 @@ interface AppContextType {
 
   // Settings
   updateConstraints: (constraints: OptimizationConstraints) => void;
+
+  // Refresh Trigger
+  refreshTrigger: number;
+  triggerRefresh: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -106,6 +110,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   // Notifications
   const { toasts, addToast, removeToast } = useNotification();
+
+  // Refresh Trigger
+  const [refreshTrigger, setRefreshTrigger] = React.useState(0);
+  const triggerRefresh = useCallback(() => setRefreshTrigger(prev => prev + 1), []);
 
   // Helper to safely extract arrays from API responses
   const extractArray = <T,>(data: any): T[] | null => {
@@ -395,6 +403,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
     // Settings
     updateConstraints,
+
+    // Refresh Trigger
+    refreshTrigger,
+    triggerRefresh,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

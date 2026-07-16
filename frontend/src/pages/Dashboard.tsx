@@ -10,7 +10,8 @@ import BatteryIndicator from '../components/BatteryStatus/BatteryIndicator';
 import RecommendationCard from '../components/RecommendationPanel/RecommendationCard';
 import Footer from '../components/Footer/Footer';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
-import { communicationWindows, groundStations, missions, recommendations, resourceData, satellites } from '../data/dummyData';
+import { useAppContext } from '../context/AppContext';
+import { resourceData } from '../data/dummyData';
 import { missionAlerts, todaysMissionSchedule, recentActivities, systemStatus, weatherImpacts, satelliteHealthSummaries } from '../data/extendedMockData';
 
 const pieData = [
@@ -46,8 +47,13 @@ const activityColors: Record<string, string> = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { missions, communicationWindows, groundStations, recommendations, tasks, triggerRefresh } = useAppContext();
   const [scheduleSearch, setScheduleSearch] = useState('');
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
+
+  const activeMissions = missions.filter(m => m.status === 'Active').length;
+  const totalMissions = missions.length;
+  const scheduledTasks = tasks.length;
 
   const filteredSchedule = todaysMissionSchedule.filter(m =>
     m.mission.toLowerCase().includes(scheduleSearch.toLowerCase()) ||
@@ -65,15 +71,15 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 
       {/* Existing Stat Cards */}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <DashboardCard title="Total Missions" value="24" subtitle="Across 3 orbital constellations" icon={<FiActivity />} />
-        <DashboardCard title="Active Missions" value="8" subtitle="2 require immediate attention" icon={<FiZap />} accent="from-amber-400 to-orange-500" />
-        <DashboardCard title="Scheduled Tasks" value="41" subtitle="11 high-priority windows" icon={<FiCpu />} accent="from-emerald-400 to-cyan-500" />
+        <DashboardCard title="Total Missions" value={String(totalMissions)} subtitle="Across 3 orbital constellations" icon={<FiActivity />} />
+        <DashboardCard title="Active Missions" value={String(activeMissions)} subtitle="Monitoring active status" icon={<FiZap />} accent="from-amber-400 to-orange-500" />
+        <DashboardCard title="Scheduled Tasks" value={String(scheduledTasks)} subtitle="Across all satellites" icon={<FiCpu />} accent="from-emerald-400 to-cyan-500" />
         <DashboardCard title="Satellite Health" value="91%" subtitle="Average asset readiness" icon={<FiMapPin />} accent="from-violet-500 to-fuchsia-500" />
       </section>
 

@@ -1,16 +1,18 @@
 import { useState, useMemo } from 'react';
 import { FiBatteryCharging, FiHardDrive, FiServer, FiZap, FiRefreshCw, FiSearch, FiTrendingUp, FiTrendingDown, FiMinus, FiCpu, FiSun } from 'react-icons/fi';
-import { AreaChart, Area, LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { AreaChart, Area, LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, ComposedChart, Legend, Brush } from 'recharts';
 import ResourceChart from '../components/ResourceCharts/ResourceChart';
 import BatteryIndicator from '../components/BatteryStatus/BatteryIndicator';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
+import { useAppContext } from '../context/AppContext';
 import { resourceData } from '../data/dummyData';
-import { batteryForecast, powerForecast, memoryForecast, bandwidthForecast, storageForecast, subsystemHealth, resourceUtilization } from '../data/extendedMockData';
+import { batteryForecast, powerForecast, memoryForecast, bandwidthForecast, storageForecast, cpuForecast, subsystemHealth, resourceUtilization } from '../data/extendedMockData';
 
 const Resources = () => {
   const [resSearch, setResSearch] = useState('');
   const [resSortKey, setResSortKey] = useState('satellite');
   const [resSortDir, setResSortDir] = useState<'asc' | 'desc'>('asc');
+  const { triggerRefresh } = useAppContext();
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
 
   const filteredResources = useMemo(() => {
@@ -42,12 +44,34 @@ const Resources = () => {
   };
 
   const forecastCharts = [
-    { title: 'Battery Forecast', data: batteryForecast, color: '#38bdf8' },
-    { title: 'Power Forecast', data: powerForecast, color: '#8b5cf6' },
-    { title: 'Memory Forecast', data: memoryForecast, color: '#f59e0b' },
-    { title: 'Bandwidth Forecast', data: bandwidthForecast, color: '#10b981' },
-    { title: 'Storage Forecast', data: storageForecast, color: '#ef4444' },
+    { title: 'Power Forecast', data: powerForecast, color: '#8b5cf6', unit: 'W' },
+    { title: 'Bandwidth Forecast', data: bandwidthForecast, color: '#10b981', unit: 'Mbps' },
+    { title: 'Storage Forecast', data: storageForecast, color: '#ef4444', unit: '%' },
+    { title: 'CPU Forecast', data: cpuForecast, color: '#f59e0b', unit: '%' },
+    { title: 'Memory Forecast', data: memoryForecast, color: '#38bdf8', unit: '%' },
   ];
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-slate-900/95 border border-slate-700/50 p-3 rounded-lg shadow-xl backdrop-blur-md">
+          <p className="text-slate-300 text-xs mb-2">{label}</p>
+          <div className="space-y-1">
+            {data.actual > 0 && (
+              <p className="text-white text-sm"><span className="text-slate-400">Actual:</span> {data.actual.toFixed(1)}</p>
+            )}
+            <p className="text-sky-400 text-sm"><span className="text-slate-400">Predicted:</span> {data.predicted.toFixed(1)}</p>
+            <p className="text-emerald-400 text-xs"><span className="text-slate-400">Upper:</span> {data.upperBound.toFixed(1)}</p>
+            <p className="text-rose-400 text-xs"><span className="text-slate-400">Lower:</span> {data.lowerBound.toFixed(1)}</p>
+            <p className="text-slate-300 text-xs"><span className="text-slate-400">Diff:</span> {(data.upperBound - data.lowerBound).toFixed(1)}</p>
+            <p className="text-violet-300 text-xs"><span className="text-slate-400">Confidence:</span> 95%</p>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="space-y-6">
@@ -60,17 +84,17 @@ const Resources = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 
       {/* Existing Stat Cards */}
       <div className="grid gap-4 md:grid-cols-4">
         {[
-          { label: 'Battery', value: '78%', icon: FiBatteryCharging },
-          { label: 'Power', value: '62%', icon: FiZap },
-          { label: 'Memory', value: '69%', icon: FiServer },
-          { label: 'Storage', value: '74%', icon: FiHardDrive },
+          { label: 'Battery', value: `${Math.round(resourceUtilization.reduce((acc, r) => acc + r.battery, 0) / (resourceUtilization.length || 1))}%`, icon: FiBatteryCharging },
+          { label: 'Power', value: `${Math.round(resourceUtilization.reduce((acc, r) => acc + r.power, 0) / (resourceUtilization.length || 1))}%`, icon: FiZap },
+          { label: 'Memory', value: `${Math.round(resourceUtilization.reduce((acc, r) => acc + r.memory, 0) / (resourceUtilization.length || 1))}%`, icon: FiServer },
+          { label: 'Storage', value: `${Math.round(resourceUtilization.reduce((acc, r) => acc + r.storage, 0) / (resourceUtilization.length || 1))}%`, icon: FiHardDrive },
         ].map(item => {
           const Icon = item.icon;
           return (
@@ -113,18 +137,42 @@ const Resources = () => {
           {forecastCharts.map(fc => (
             <div key={fc.title} className="rounded-2xl border border-slate-200 dark:border-slate-700 print:border-slate-300 bg-slate-50 dark:bg-slate-800/80 print:bg-white p-4">
               <p className="mb-2 text-sm font-medium text-slate-900 dark:text-white print:text-black">{fc.title}</p>
-              <div className="h-40">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={fc.data}>
+                  <ComposedChart data={fc.data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid stroke="rgba(148,163,184,0.1)" strokeDasharray="4 4" />
-                    <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 8 }} interval={5} />
-                    <YAxis stroke="#64748b" tick={{ fontSize: 9 }} />
-                    <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff' }} />
-                    <Area type="monotone" dataKey="upperBound" stroke="none" fill={fc.color} fillOpacity={0.08} />
-                    <Area type="monotone" dataKey="lowerBound" stroke="none" fill={fc.color} fillOpacity={0.08} />
-                    <Line type="monotone" dataKey="predicted" stroke={fc.color} strokeWidth={2} strokeDasharray="6 3" dot={false} />
-                    <Line type="monotone" dataKey="actual" stroke={fc.color} strokeWidth={2} dot={false} />
-                  </AreaChart>
+                    <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 10 }} interval={5} />
+                    <YAxis stroke="#64748b" tick={{ fontSize: 10 }} label={{ value: fc.unit, angle: -90, position: 'insideLeft', style: { fill: '#64748b', fontSize: 10 } }} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
+                    {/* Confidence interval band */}
+                    <Area 
+                      type="monotone" 
+                      dataKey={(data) => [data.lowerBound, data.upperBound]} 
+                      stroke="none" 
+                      fill={fc.color} 
+                      fillOpacity={0.15} 
+                      name="95% Confidence Interval"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="actual" 
+                      stroke={fc.color} 
+                      strokeWidth={2} 
+                      dot={false} 
+                      name="Actual"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="predicted" 
+                      stroke={fc.color} 
+                      strokeWidth={2} 
+                      strokeDasharray="4 4" 
+                      dot={false} 
+                      name="Predicted"
+                    />
+                    <Brush dataKey="time" height={20} stroke="#64748b" fill="rgba(15, 23, 42, 0.5)" tickFormatter={() => ''} />
+                  </ComposedChart>
                 </ResponsiveContainer>
               </div>
             </div>

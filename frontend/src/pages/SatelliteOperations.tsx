@@ -4,8 +4,8 @@ import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Cart
 import CommunicationWindowCard from '../components/CommunicationWindow/CommunicationWindowCard';
 import PayloadCard from '../components/PayloadCard/PayloadCard';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
+import { useAppContext } from '../context/AppContext';
 import { communicationWindows, groundStations, payloads } from '../data/dummyData';
-import { satellites } from '../data/mockData';
 import { satelliteHealthSummaries, generateTelemetryData, signalStrengthData, communicationQueue } from '../data/extendedMockData';
 
 const SatelliteOperations = () => {
@@ -15,6 +15,7 @@ const SatelliteOperations = () => {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [queueSearch, setQueueSearch] = useState('');
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
+  const { satellites, triggerRefresh } = useAppContext();
 
   const filteredSatellites = useMemo(() => {
     let sats = satellites.filter(s =>
@@ -62,7 +63,7 @@ const SatelliteOperations = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 

@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { FiGlobe, FiWifi, FiClock, FiRefreshCw, FiSearch, FiChevronDown, FiChevronUp, FiDownload } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Badge, Button } from '../components/common/index';
-import { useExport } from '../hooks';
+import { Badge, Button, Modal, Input, Select, TextArea } from '../components/common/index';
+import { useExport, useNotification } from '../hooks';
+import { useAppContext } from '../context/AppContext';
 import { groundStationPlannerData, communicationQueue, type GroundStationPlannerEntry } from '../data/extendedMockData';
 
 const weatherBadge = (w: string) => {
@@ -23,7 +24,18 @@ const GroundStationPlanner = () => {
   const [stationStatuses, setStationStatuses] = useState<Record<string, string>>({});
   const [queueSearch, setQueueSearch] = useState('');
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
+
+  // Modal States
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showOptimizeModal, setShowOptimizeModal] = useState(false);
+
+  // Form States
+  const [assignForm, setAssignForm] = useState({ station: '', satellite: '', startTime: '', endTime: '', priority: 'Medium' });
+  const [optimizeForm, setOptimizeForm] = useState({ strategy: 'Balanced', constraint: 'None', maxLatency: '50' });
+
   const { exportToCSV, exportToJSON } = useExport();
+  const { addToast } = useNotification();
+  const { triggerRefresh } = useAppContext();
 
   const getStatus = (gs: GroundStationPlannerEntry) => (stationStatuses[gs.id] || gs.status) as any;
 
@@ -85,7 +97,7 @@ const GroundStationPlanner = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 
@@ -112,8 +124,8 @@ const GroundStationPlanner = () => {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
-        <Button variant="primary" icon={<FiGlobe />}>Assign Station</Button>
-        <Button variant="secondary" icon={<FiWifi />}>Optimize Routing</Button>
+        <Button variant="primary" icon={<FiGlobe />} onClick={() => setShowAssignModal(true)}>Assign Station</Button>
+        <Button variant="secondary" icon={<FiWifi />} onClick={() => setShowOptimizeModal(true)}>Optimize Routing</Button>
         <Button variant="secondary" icon={<FiDownload />} onClick={() => exportToCSV(groundStationPlannerData, 'ground_stations')}>Export CSV</Button>
         <Button variant="secondary" icon={<FiDownload />} onClick={() => exportToJSON(groundStationPlannerData, 'ground_stations')}>Export JSON</Button>
       </div>
@@ -297,6 +309,62 @@ const GroundStationPlanner = () => {
           </table>
         </div>
       </div>
+
+      {/* Modals */}
+      <Modal isOpen={showAssignModal} onClose={() => setShowAssignModal(false)} title="Assign Ground Station" size="md">
+        <div className="space-y-4">
+          <Select label="Ground Station" value={assignForm.station} onChange={e => setAssignForm({ ...assignForm, station: e.target.value })} options={[
+            { value: '', label: 'Select Station' },
+            ...groundStationPlannerData.filter(g => getStatus(g) === 'Operational').map(g => ({ value: g.name, label: g.name }))
+          ]} />
+          <Input label="Target Satellite" value={assignForm.satellite} onChange={e => setAssignForm({ ...assignForm, satellite: e.target.value })} placeholder="e.g., Astra-7" />
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Start Time" value={assignForm.startTime} onChange={e => setAssignForm({ ...assignForm, startTime: e.target.value })} type="datetime-local" />
+            <Input label="End Time" value={assignForm.endTime} onChange={e => setAssignForm({ ...assignForm, endTime: e.target.value })} type="datetime-local" />
+          </div>
+          <Select label="Priority" value={assignForm.priority} onChange={e => setAssignForm({ ...assignForm, priority: e.target.value })} options={[
+            { value: 'Low', label: 'Low' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'High', label: 'High' },
+            { value: 'Critical', label: 'Critical' }
+          ]} />
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="ghost" onClick={() => setShowAssignModal(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => {
+              if (!assignForm.station || !assignForm.satellite || !assignForm.startTime) return addToast('Please fill all required fields', 'error');
+              addToast(`Station ${assignForm.station} assigned to ${assignForm.satellite}`, 'success');
+              setShowAssignModal(false);
+            }}>Save Assignment</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showOptimizeModal} onClose={() => setShowOptimizeModal(false)} title="Optimize Routing" size="md">
+        <div className="space-y-4">
+          <p className="text-sm text-slate-600 dark:text-slate-400">Run optimization algorithms to improve ground station utilization and reduce latency.</p>
+          <Select label="Optimization Strategy" value={optimizeForm.strategy} onChange={e => setOptimizeForm({ ...optimizeForm, strategy: e.target.value })} options={[
+            { value: 'Balanced', label: 'Balanced Load' },
+            { value: 'Latency', label: 'Minimum Latency' },
+            { value: 'Availability', label: 'Maximum Availability' }
+          ]} />
+          <Select label="Strict Constraints" value={optimizeForm.constraint} onChange={e => setOptimizeForm({ ...optimizeForm, constraint: e.target.value })} options={[
+            { value: 'None', label: 'None' },
+            { value: 'Weather', label: 'Avoid Bad Weather' },
+            { value: 'Maintenance', label: 'Avoid Maintenance Windows' }
+          ]} />
+          <Input label="Max Tolerable Latency (ms)" value={optimizeForm.maxLatency} onChange={e => setOptimizeForm({ ...optimizeForm, maxLatency: e.target.value })} type="number" />
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="ghost" onClick={() => setShowOptimizeModal(false)}>Cancel</Button>
+            <Button variant="primary" icon={<FiRefreshCw />} onClick={() => {
+              addToast('Routing optimization initiated...', 'info');
+              setTimeout(() => {
+                addToast('Optimization complete. Routes updated.', 'success');
+                setShowOptimizeModal(false);
+              }, 1500);
+            }}>Run Optimization</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

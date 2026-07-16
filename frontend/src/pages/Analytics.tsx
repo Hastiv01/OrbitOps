@@ -2,6 +2,7 @@ import { FiRefreshCw, FiDownload, FiPrinter } from 'react-icons/fi';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, Pie, PieChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend } from 'recharts';
 import { Badge, Button } from '../components/common/index';
 import { useExport } from '../hooks';
+import { useAppContext } from '../context/AppContext';
 import { resourceData } from '../data/dummyData';
 import { missionSuccessTrend, missionFailureAnalysis, satelliteUtilization, payloadUtilization, groundStationUsage, missionTypeDistribution, priorityDistribution, riskDistribution, batteryConsumptionTrend, communicationTrend, resourceUsageHeatmap } from '../data/extendedMockData';
 
@@ -21,9 +22,12 @@ const pieData = [
 const colors = ['#38bdf8', '#8b5cf6', '#f59e0b'];
 const typeColors = ['#38bdf8', '#8b5cf6', '#f59e0b', '#10b981'];
 
-const Analytics = () => {
   const { exportToCSV, exportToJSON } = useExport();
+  const { missions, triggerRefresh } = useAppContext();
   const lastUpdated = new Date().toLocaleTimeString();
+
+  const completedMissions = missions.filter(m => m.status === 'Completed').length;
+  const completionRate = missions.length > 0 ? Math.round((completedMissions / missions.length) * 100) : 0;
 
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -46,14 +50,14 @@ const Analytics = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 
       {/* Existing Stat Cards */}
       <div className="grid gap-4 md:grid-cols-3">
         {[
-          { label: 'Mission Completion Rate', value: '86%' },
+          { label: 'Mission Completion Rate', value: `${completionRate}%` },
           { label: 'Resource Utilization', value: '72%' },
           { label: 'Average Response Time', value: '18m' },
         ].map(item => (

@@ -4,7 +4,6 @@ import { FiCalendar, FiClock, FiRefreshCw, FiSearch, FiZap, FiAlertTriangle, FiD
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
 import { useExport } from '../hooks';
-import { missions, satellites, payloads, groundStations } from '../data/mockData';
 import { schedulerSlots, calendarMissions, todaysMissionSchedule } from '../data/extendedMockData';
 
 const priorityColors: Record<string, string> = { Critical: '#ef4444', High: '#f59e0b', Medium: '#38bdf8', Low: '#8b5cf6' };
@@ -18,6 +17,7 @@ const MissionScheduler = () => {
   const [optimizing, setOptimizing] = useState(false);
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
   const { exportToCSV, exportToJSON } = useExport();
+  const { missions, satellites, payloads, groundStations, triggerRefresh } = useAppContext();
 
   const now = new Date();
   const year = now.getFullYear();
@@ -82,7 +82,7 @@ const MissionScheduler = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 

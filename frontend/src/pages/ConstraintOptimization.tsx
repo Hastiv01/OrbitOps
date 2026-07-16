@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { FiZap, FiTarget, FiAlertTriangle, FiCheckCircle, FiRefreshCw, FiSliders, FiClock } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Badge, Button, ProgressBar, Card, Spinner } from '../components/common/index';
-import { missions } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 import { batteryForecast, resourceUsageHeatmap } from '../data/extendedMockData';
 
 interface ConstraintConfig {
@@ -19,6 +19,8 @@ const ConstraintOptimization = () => {
   const [constraints, setConstraints] = useState<ConstraintConfig>({
     battery: 20, power: 1000, storage: 4000, memory: 4000, communication: 10, payload: 4, priorityWeight: 0.5,
   });
+  const { battery, power, storage, memory, communication, payload, priorityWeight } = constraints;
+  const { missions, triggerRefresh } = useAppContext();
   const [optimizing, setOptimizing] = useState(false);
   const [optimized, setOptimized] = useState(false);
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
@@ -109,7 +111,7 @@ const ConstraintOptimization = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 

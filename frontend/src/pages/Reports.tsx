@@ -3,7 +3,8 @@ import { FiFileText, FiDownload, FiPrinter, FiRefreshCw, FiSearch, FiCalendar, F
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Badge, Button, Tabs } from '../components/common/index';
 import { useExport, useNotification } from '../hooks';
-import { missions } from '../data/mockData';
+import { generatePDFReport } from '../services/reportGenerator';
+import { useAppContext } from '../context/AppContext';
 import { missionSuccessTrend, batteryConsumptionTrend, communicationTrend, missionAlerts, systemLogs, reportHistory } from '../data/extendedMockData';
 
 const Reports = () => {
@@ -19,6 +20,7 @@ const Reports = () => {
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
   const { exportToCSV, exportToJSON } = useExport();
   const { addToast } = useNotification();
+  const { missions, triggerRefresh } = useAppContext();
 
   const filteredMissions = useMemo(() => {
     return missions.filter(m => {
@@ -52,14 +54,7 @@ const Reports = () => {
       if (format === 'csv') { exportToCSV(filteredMissions, filename); addToast('CSV Report Downloaded', 'success'); }
       else if (format === 'json') { exportToJSON({ missions: filteredMissions, dateRange: { from: dateFrom, to: dateTo } }, filename); addToast('JSON Report Downloaded', 'success'); }
       else if (format === 'pdf') { 
-        // Mock PDF download using a Blob
-        const blob = new Blob(['Mission Report PDF Mock Data\n\n' + JSON.stringify(filteredMissions, null, 2)], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${filename}.pdf`;
-        a.click();
-        URL.revokeObjectURL(url);
+        generatePDFReport(filteredMissions, filename, 'Mission Report');
         addToast('PDF Report Generated and Downloaded', 'success'); 
       }
     }, 1500);
@@ -88,7 +83,7 @@ const Reports = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 

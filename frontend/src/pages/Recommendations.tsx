@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { FiAlertTriangle, FiCpu, FiRadio, FiZap, FiRefreshCw, FiSearch, FiCheck, FiX, FiPlay, FiClock } from 'react-icons/fi';
 import { Badge, Button, ProgressBar, Card, Modal } from '../components/common/index';
+import { useAppContext } from '../context/AppContext';
 import RecommendationCard from '../components/RecommendationPanel/RecommendationCard';
 import { recommendations } from '../data/dummyData';
 import { recommendationDetails, type RecommendationDetail } from '../data/extendedMockData';
@@ -10,6 +11,7 @@ const Recommendations = () => {
   const [historySearch, setHistorySearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [recStatuses, setRecStatuses] = useState<Record<string, string>>({});
+  const { triggerRefresh } = useAppContext();
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
 
   const getStatus = (rec: RecommendationDetail) => recStatuses[rec.id] || rec.status;
@@ -42,7 +44,7 @@ const Recommendations = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 

@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { FiCpu, FiZap, FiHardDrive, FiRefreshCw, FiSearch, FiDownload, FiPlay, FiPause, FiTool, FiClock } from 'react-icons/fi';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Badge, Button, ProgressBar } from '../components/common/index';
+import { Badge, Button, ProgressBar, Modal, Input, Select, TextArea } from '../components/common/index';
 import { useExport, useNotification } from '../hooks';
+import { useAppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { payloadPlannerData, payloadHistory, type PayloadPlannerEntry } from '../data/extendedMockData';
 
@@ -14,8 +15,19 @@ const PayloadPlanner = () => {
   const [selectedPayload, setSelectedPayload] = useState<PayloadPlannerEntry | null>(null);
   const [payloadStatuses, setPayloadStatuses] = useState<Record<string, string>>({});
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
+
+  // Modal States
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+
+  // Form States
+  const [assignForm, setAssignForm] = useState({ name: '', type: 'Camera', satellite: '', weight: '', power: '', dataRate: '' });
+  const [scheduleForm, setScheduleForm] = useState({ payload: '', satellite: '', date: '', startTime: '', endTime: '', priority: 'Medium' });
+  const [maintenanceForm, setMaintenanceForm] = useState({ payload: '', type: 'Routine', reason: '', priority: 'Medium' });
   const { exportToCSV, exportToJSON } = useExport();
   const { addToast } = useNotification();
+  const { triggerRefresh } = useAppContext();
   const navigate = useNavigate();
 
   const getStatus = (p: PayloadPlannerEntry) => (payloadStatuses[p.id] || p.status) as any;
@@ -78,7 +90,7 @@ const PayloadPlanner = () => {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-slate-500">Updated {lastUpdated}</span>
-          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={() => window.location.reload()}>Refresh</Button>
+          <Button variant="secondary" size="sm" icon={<FiRefreshCw />} onClick={triggerRefresh}>Refresh</Button>
         </div>
       </div>
 
@@ -105,9 +117,9 @@ const PayloadPlanner = () => {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
-        <Button variant="primary" icon={<FiCpu />} onClick={() => addToast('Payload assignment initiated', 'success')}>Assign Payload</Button>
-        <Button variant="secondary" icon={<FiClock />} onClick={() => navigate('/scheduler')}>Schedule Payload</Button>
-        <Button variant="secondary" icon={<FiTool />} onClick={() => addToast('Maintenance request submitted', 'info')}>Request Maintenance</Button>
+        <Button variant="primary" icon={<FiCpu />} onClick={() => setShowAssignModal(true)}>Assign Payload</Button>
+        <Button variant="secondary" icon={<FiClock />} onClick={() => setShowScheduleModal(true)}>Schedule Payload</Button>
+        <Button variant="secondary" icon={<FiTool />} onClick={() => setShowMaintenanceModal(true)}>Request Maintenance</Button>
         <Button variant="secondary" icon={<FiDownload />} onClick={() => { exportToCSV(payloadPlannerData, 'payloads'); addToast('CSV file downloaded successfully', 'success'); }}>Export CSV</Button>
         <Button variant="secondary" icon={<FiDownload />} onClick={() => { exportToJSON(payloadPlannerData, 'payloads'); addToast('JSON file downloaded successfully', 'success'); }}>Export JSON</Button>
       </div>
@@ -302,6 +314,101 @@ const PayloadPlanner = () => {
           </table>
         </div>
       </div>
+
+      {/* Modals */}
+      <Modal isOpen={showAssignModal} onClose={() => setShowAssignModal(false)} title="Assign Payload" size="md">
+        <div className="space-y-4">
+          <Input label="Payload Name" value={assignForm.name} onChange={e => setAssignForm({ ...assignForm, name: e.target.value })} placeholder="e.g., High-Res Optical Imager" />
+          <Select label="Payload Type" value={assignForm.type} onChange={e => setAssignForm({ ...assignForm, type: e.target.value })} options={[
+            { value: 'Camera', label: 'Camera' },
+            { value: 'Radar', label: 'Radar' },
+            { value: 'Thermal Sensor', label: 'Thermal Sensor' },
+            { value: 'Spectrometer', label: 'Spectrometer' },
+            { value: 'Communication', label: 'Communication' }
+          ]} />
+          <Select label="Target Satellite" value={assignForm.satellite} onChange={e => setAssignForm({ ...assignForm, satellite: e.target.value })} options={[
+            { value: '', label: 'Select Satellite' },
+            { value: 'Astra-7', label: 'Astra-7' },
+            { value: 'Nova-2', label: 'Nova-2' },
+            { value: 'Orion-4', label: 'Orion-4' }
+          ]} />
+          <div className="grid grid-cols-3 gap-4">
+            <Input label="Weight (kg)" value={assignForm.weight} onChange={e => setAssignForm({ ...assignForm, weight: e.target.value })} type="number" />
+            <Input label="Power (W)" value={assignForm.power} onChange={e => setAssignForm({ ...assignForm, power: e.target.value })} type="number" />
+            <Input label="Data Rate" value={assignForm.dataRate} onChange={e => setAssignForm({ ...assignForm, dataRate: e.target.value })} placeholder="e.g., 50 Mbps" />
+          </div>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="ghost" onClick={() => setShowAssignModal(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => {
+              if (!assignForm.name || !assignForm.satellite) return addToast('Please fill all required fields', 'error');
+              addToast(`Payload ${assignForm.name} assigned to ${assignForm.satellite}`, 'success');
+              setShowAssignModal(false);
+            }}>Save Assignment</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showScheduleModal} onClose={() => setShowScheduleModal(false)} title="Schedule Payload" size="md">
+        <div className="space-y-4">
+          <Select label="Payload" value={scheduleForm.payload} onChange={e => setScheduleForm({ ...scheduleForm, payload: e.target.value })} options={[
+            { value: '', label: 'Select Payload' },
+            ...payloadPlannerData.map(p => ({ value: p.name, label: p.name }))
+          ]} />
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Date" value={scheduleForm.date} onChange={e => setScheduleForm({ ...scheduleForm, date: e.target.value })} type="date" />
+            <Select label="Priority" value={scheduleForm.priority} onChange={e => setScheduleForm({ ...scheduleForm, priority: e.target.value })} options={[
+              { value: 'Low', label: 'Low' },
+              { value: 'Medium', label: 'Medium' },
+              { value: 'High', label: 'High' },
+              { value: 'Critical', label: 'Critical' }
+            ]} />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Start Time" value={scheduleForm.startTime} onChange={e => setScheduleForm({ ...scheduleForm, startTime: e.target.value })} type="time" />
+            <Input label="End Time" value={scheduleForm.endTime} onChange={e => setScheduleForm({ ...scheduleForm, endTime: e.target.value })} type="time" />
+          </div>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="ghost" onClick={() => setShowScheduleModal(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => {
+              if (!scheduleForm.payload || !scheduleForm.date || !scheduleForm.startTime) return addToast('Please fill all required fields', 'error');
+              addToast(`Payload ${scheduleForm.payload} scheduled successfully`, 'success');
+              setShowScheduleModal(false);
+            }}>Save Schedule</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showMaintenanceModal} onClose={() => setShowMaintenanceModal(false)} title="Request Maintenance" size="md">
+        <div className="space-y-4">
+          <Select label="Payload" value={maintenanceForm.payload} onChange={e => setMaintenanceForm({ ...maintenanceForm, payload: e.target.value })} options={[
+            { value: '', label: 'Select Payload' },
+            ...payloadPlannerData.map(p => ({ value: p.name, label: p.name }))
+          ]} />
+          <Select label="Maintenance Type" value={maintenanceForm.type} onChange={e => setMaintenanceForm({ ...maintenanceForm, type: e.target.value })} options={[
+            { value: 'Routine', label: 'Routine Inspection' },
+            { value: 'Calibration', label: 'Sensor Calibration' },
+            { value: 'Software', label: 'Software Update' },
+            { value: 'Repair', label: 'Emergency Repair' }
+          ]} />
+          <Select label="Priority" value={maintenanceForm.priority} onChange={e => setMaintenanceForm({ ...maintenanceForm, priority: e.target.value })} options={[
+            { value: 'Low', label: 'Low' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'High', label: 'High' },
+            { value: 'Critical', label: 'Critical' }
+          ]} />
+          <TextArea label="Reason" value={maintenanceForm.reason} onChange={e => setMaintenanceForm({ ...maintenanceForm, reason: e.target.value })} placeholder="Describe the maintenance requirement..." />
+          <div className="flex justify-end gap-3 mt-6">
+            <Button variant="ghost" onClick={() => setShowMaintenanceModal(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => {
+              if (!maintenanceForm.payload || !maintenanceForm.reason) return addToast('Please fill all required fields', 'error');
+              const p = payloadPlannerData.find(x => x.name === maintenanceForm.payload);
+              if (p) setPayloadStatuses(prev => ({ ...prev, [p.id]: 'Maintenance' }));
+              addToast(`Maintenance requested for ${maintenanceForm.payload}`, 'success');
+              setShowMaintenanceModal(false);
+            }}>Submit Request</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

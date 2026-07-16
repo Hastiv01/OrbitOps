@@ -211,6 +211,7 @@ export const powerForecast = generateForecast(65, 0.1);
 export const memoryForecast = generateForecast(55, 0.4);
 export const bandwidthForecast = generateForecast(70, -0.1);
 export const storageForecast = generateForecast(60, 0.5);
+export const cpuForecast = generateForecast(40, 0.2);
 
 // ==================== SUBSYSTEM HEALTH ====================
 export interface SubsystemHealth {
