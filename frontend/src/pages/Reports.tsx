@@ -51,13 +51,28 @@ const Reports = () => {
     const filename = `Mission_Report_${dateStr}`;
     setTimeout(() => {
       setGenerating(false);
-      if (format === 'csv') { exportToCSV(filteredMissions, filename); addToast('CSV Report Downloaded', 'success'); }
-      else if (format === 'json') { exportToJSON({ missions: filteredMissions, dateRange: { from: dateFrom, to: dateTo } }, filename); addToast('JSON Report Downloaded', 'success'); }
+      const dataToExport = filteredMissions.length > 0 ? filteredMissions : missions;
+      if (format === 'csv') { 
+        const success = exportToCSV(dataToExport, filename); 
+        if (success) {
+          addToast('CSV Report Downloaded successfully', 'success'); 
+        } else {
+          addToast('No data available to export to CSV', 'warning');
+        }
+      }
+      else if (format === 'json') { 
+        const success = exportToJSON({ missions: dataToExport, dateRange: { from: dateFrom, to: dateTo } }, filename); 
+        if (success) {
+          addToast('JSON Report Downloaded successfully', 'success'); 
+        } else {
+          addToast('No data available to export to JSON', 'warning');
+        }
+      }
       else if (format === 'pdf') { 
-        generatePDFReport(filteredMissions, filename, 'Mission Report');
+        generatePDFReport(dataToExport, filename, 'Mission Report');
         addToast('PDF Report Generated and Downloaded', 'success'); 
       }
-    }, 1500);
+    }, 1000);
   };
 
   const successRate = [

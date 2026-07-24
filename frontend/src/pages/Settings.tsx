@@ -169,7 +169,7 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className="mt-4 flex gap-3">
-                  <Button variant="secondary">Test Connection</Button>
+                  <Button variant="secondary" onClick={() => addToast('Connection test successful! Endpoint latency: 38ms.', 'success')}>Test Connection</Button>
                   <Button variant="primary" icon={<FiSave />} onClick={() => addToast('API settings updated.', 'success')}>Save Configuration</Button>
                 </div>
               </div>

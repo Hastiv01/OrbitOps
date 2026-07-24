@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiRefreshCw, FiSearch, FiZap, FiAlertTriangle, FiDownload, FiPlus, FiCheck } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 import { Badge, Button, ProgressBar, Card } from '../components/common/index';
-import { useExport } from '../hooks';
+import { useExport, useNotification } from '../hooks';
 import { useAppContext } from '../context/AppContext';
 import { Mission, Satellite, Payload, GroundStation } from '../data/mockData';
 import { schedulerSlots, calendarMissions, todaysMissionSchedule } from '../data/extendedMockData';
@@ -19,6 +19,7 @@ const MissionScheduler = () => {
   const [optimizing, setOptimizing] = useState(false);
   const [lastUpdated] = useState(new Date().toLocaleTimeString());
   const { exportToCSV, exportToJSON } = useExport();
+  const { addToast } = useNotification();
   const { missions, satellites, payloads, groundStations, triggerRefresh } = useAppContext();
 
   const now = new Date();
@@ -115,8 +116,16 @@ const MissionScheduler = () => {
         <Button variant="secondary" icon={<FiZap />} onClick={runOptimization} isLoading={optimizing}>
           {optimizing ? 'Optimizing...' : 'Optimize Schedule'}
         </Button>
-        <Button variant="secondary" icon={<FiDownload />} onClick={() => exportToCSV(filteredMissions, 'scheduled_missions')}>Export CSV</Button>
-        <Button variant="secondary" icon={<FiDownload />} onClick={() => exportToJSON(filteredMissions, 'scheduled_missions')}>Export JSON</Button>
+        <Button variant="secondary" icon={<FiDownload />} onClick={() => {
+          const data = filteredMissions.length > 0 ? filteredMissions : missions;
+          const success = exportToCSV(data, 'scheduled_missions');
+          if (success) addToast('Scheduled missions CSV downloaded', 'success');
+        }}>Export CSV</Button>
+        <Button variant="secondary" icon={<FiDownload />} onClick={() => {
+          const data = filteredMissions.length > 0 ? filteredMissions : missions;
+          const success = exportToJSON(data, 'scheduled_missions');
+          if (success) addToast('Scheduled missions JSON downloaded', 'success');
+        }}>Export JSON</Button>
       </div>
 
       {/* Optimization Result */}

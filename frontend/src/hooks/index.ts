@@ -486,37 +486,81 @@ export const useOptimization = (missions: Mission[], constraints: OptimizationCo
 
 // ==================== EXPORT HOOK ====================
 export const useExport = () => {
-  const exportToCSV = useCallback((data: any[], filename: string) => {
+  const exportToCSV = useCallback((data: any[], filename: string): boolean => {
     if (!data || data.length === 0) {
-      console.error('No data to export');
-      return;
+      console.warn('No data to export to CSV');
+      return false;
     }
 
-    const headers = Object.keys(data[0]);
-    const rows = data.map((item) => headers.map((header) => JSON.stringify(item[header] || '')).join(','));
+    try {
+      const headersSet = new Set<string>();
+      data.forEach((item) => {
+        if (item && typeof item === 'object') {
+          Object.keys(item).forEach((key) => headersSet.add(key));
+        }
+      });
+      const headers = Array.from(headersSet);
 
-    const csv = [headers.join(','), ...rows].join('\n');
+      if (headers.length === 0) return false;
 
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
-    element.setAttribute('download', `${filename}.csv`);
-    element.style.display = 'none';
+      const formatCell = (val: any): string => {
+        if (val === null || val === undefined) return '""';
+        if (Array.isArray(val)) {
+          return `"${val.join('; ').replace(/"/g, '""')}"`;
+        }
+        if (typeof val === 'object') {
+          return `"${JSON.stringify(val).replace(/"/g, '""')}"`;
+        }
+        const str = String(val);
+        return `"${str.replace(/"/g, '""')}"`;
+      };
 
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+      const rows = data.map((item) =>
+        headers.map((header) => formatCell(item[header])).join(',')
+      );
+
+      const csvContent = [headers.map((h) => `"${h.replace(/"/g, '""')}"`).join(','), ...rows].join('\r\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename.endsWith('.csv') ? filename : `${filename}.csv`);
+      link.style.display = 'none';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      return true;
+    } catch (err) {
+      console.error('Error exporting CSV:', err);
+      return false;
+    }
   }, []);
 
-  const exportToJSON = useCallback((data: any, filename: string) => {
-    const json = JSON.stringify(data, null, 2);
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(json));
-    element.setAttribute('download', `${filename}.json`);
-    element.style.display = 'none';
+  const exportToJSON = useCallback((data: any, filename: string): boolean => {
+    if (!data) return false;
+    try {
+      const jsonContent = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
 
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename.endsWith('.json') ? filename : `${filename}.json`);
+      link.style.display = 'none';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      return true;
+    } catch (err) {
+      console.error('Error exporting JSON:', err);
+      return false;
+    }
   }, []);
 
   const printData = useCallback((content: string) => {
